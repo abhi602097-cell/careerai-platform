@@ -1,0 +1,167 @@
+[
+  {
+    "top3": [
+      {
+        "career": "Blockchain Developer",
+        "prob": 36.77
+      },
+      {
+        "career": "Cloud Architect",
+        "prob": 13.33
+      },
+      {
+        "career": "DevOps Engineer",
+        "prob": 9.43
+      }
+    ],
+    "factors": [
+      {
+        "feature": "Personality_Analytical",
+        "display": "Analytical Personality",
+        "pct": 19.87,
+        "dir": "positive"
+      },
+      {
+        "feature": "Preferred_Tech",
+        "display": "Tech Preference",
+        "pct": 14.63,
+        "dir": "positive"
+      },
+      {
+        "feature": "Preferred_Business",
+        "display": "Business Preference",
+        "pct": 9.86,
+        "dir": "negative"
+      },
+      {
+        "feature": "Degree",
+        "display": "Degree",
+        "pct": 8.72,
+        "dir": "positive"
+      },
+      {
+        "feature": "College_Credits",
+        "display": "College Credits",
+        "pct": 7.89,
+        "dir": "positive"
+      },
+      {
+        "feature": "Personality_Creative",
+        "display": "Creative Personality",
+        "pct": 7.69,
+        "dir": "positive"
+      }
+    ],
+    "true_career": "Blockchain Developer"
+  },
+  {
+    "top3": [
+      {
+        "career": "Mechanical Engineer",
+        "prob": 11.73
+      },
+      {
+        "career": "Biomedical Engineer",
+        "prob": 10.56
+      },
+      {
+        "career": "Network Engineer",
+        "prob": 10.13
+      }
+    ],
+    "factors": [
+      {
+        "feature": "Degree",
+        "display": "Degree",
+        "pct": 25.52,
+        "dir": "positive"
+      },
+      {
+        "feature": "Personality_Analytical",
+        "display": "Analytical Personality",
+        "pct": 24.2,
+        "dir": "positive"
+      },
+      {
+        "feature": "Income_Category",
+        "display": "Income Category",
+        "pct": 9.24,
+        "dir": "negative"
+      },
+      {
+        "feature": "Personality_Creative",
+        "display": "Creative Personality",
+        "pct": 7.13,
+        "dir": "negative"
+      },
+      {
+        "feature": "College_Credits",
+        "display": "College Credits",
+        "pct": 6.4,
+        "dir": "negative"
+      },
+      {
+        "feature": "Aptitude_Score",
+        "display": "Aptitude Score",
+        "pct": 4.7,
+        "dir": "positive"
+      }
+    ],
+    "true_career": "Biomedical Engineer"
+  },
+  {
+    "top3": [
+      {
+        "career": "Mobile App Developer",
+        "prob": 24.28
+      },
+      {
+        "career": "Web Developer",
+        "prob": 13.57
+      },
+      {
+        "career": "Full Stack Developer",
+        "prob": 13.5
+      }
+    ],
+    "factors": [
+      {
+        "feature": "Personality_Creative",
+        "display": "Creative Personality",
+        "pct": 16.95,
+        "dir": "positive"
+      },
+      {
+        "feature": "Preferred_Business",
+        "display": "Business Preference",
+        "pct": 16.71,
+        "dir": "positive"
+      },
+      {
+        "feature": "Preferred_Creative",
+        "display": "Creative Preference",
+        "pct": 16.38,
+        "dir": "negative"
+      },
+      {
+        "feature": "Preferred_Tech",
+        "display": "Tech Preference",
+        "pct": 11.1,
+        "dir": "negative"
+      },
+      {
+        "feature": "GPA",
+        "display": "Overall GPA",
+        "pct": 6.0,
+        "dir": "positive"
+      },
+      {
+        "feature": "Income_Category",
+        "display": "Income Category",
+        "pct": 4.57,
+        "dir": "positive"
+      }
+    ],
+    "true_career": "Mobile App Developer"
+  }
+]

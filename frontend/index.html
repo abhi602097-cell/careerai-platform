@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI Student Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg0: #07080f;
+  --bg1: #0d0f1c;
+  --bg2: #12152b;
+  --bg3: #181c36;
+  --bg4: #1e2340;
+  --border: rgba(99,112,255,0.18);
+  --border2: rgba(99,112,255,0.32);
+  --accent: #6370ff;
+  --accent2: #a78bfa;
+  --cyan: #22d3ee;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --red: #f87171;
+  --pink: #f472b6;
+  --text0: #f0f2ff;
+  --text1: #b8bcde;
+  --text2: #6b7099;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --glow: 0 0 40px rgba(99,112,255,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--text0);font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:99px}
+
+/* ── Layout ─────────────────────────────────────────────── */
+.app{display:flex;min-height:100vh}
+.sidebar{width:240px;min-height:100vh;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;transition:transform .3s ease}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+.logo-mark{font-family:var(--font-display);font-size:18px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px}
+.logo-sub{font-size:10px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--radius-sm);color:var(--text2);cursor:pointer;transition:all .2s;font-size:14px;font-weight:500;border:1px solid transparent}
+.nav-item:hover{background:var(--bg2);color:var(--text0)}
+.nav-item.active{background:linear-gradient(135deg,rgba(99,112,255,.18),rgba(34,211,238,.08));color:var(--text0);border-color:var(--border);box-shadow:var(--glow)}
+.nav-icon{width:18px;height:18px;opacity:.7;flex-shrink:0}
+.nav-item.active .nav-icon{opacity:1}
+.sidebar-footer{padding:16px;border-top:1px solid var(--border)}
+.profile-pill{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);background:var(--bg2);cursor:pointer}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+.profile-name{font-size:13px;font-weight:500;color:var(--text0)}
+.profile-role{font-size:11px;color:var(--text2)}
+.main{margin-left:240px;flex:1;min-height:100vh}
+.page{padding:40px 44px;max-width:1100px;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Common ─────────────────────────────────────────────── */
+.page-header{margin-bottom:36px}
+.page-title{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--text0);letter-spacing:-.5px;line-height:1.2}
+.page-sub{color:var(--text2);margin-top:6px;font-size:14px}
+.accent-word{background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:border-color .2s}
+.card:hover{border-color:var(--border2)}
+.card-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--text1);letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.flex{display:flex;align-items:center}
+.gap8{gap:8px} .gap12{gap:12px} .gap16{gap:16px} .gap24{gap:24px}
+.mt8{margin-top:8px} .mt12{margin-top:12px} .mt16{margin-top:16px} .mt20{margin-top:20px} .mt24{margin-top:24px} .mt32{margin-top:32px}
+.mb8{margin-bottom:8px} .mb16{margin-bottom:16px}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.badge-accent{background:rgba(99,112,255,.15);color:var(--accent2);border:1px solid rgba(99,112,255,.25)}
+.badge-green{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.25)}
+.badge-amber{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
+.badge-red{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.25)}
+.badge-cyan{background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.2)}
+.badge-pink{background:rgba(244,114,182,.1);color:var(--pink);border:1px solid rgba(244,114,182,.2)}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:var(--font-body)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#4f46e5);color:white;box-shadow:0 4px 20px rgba(99,112,255,.3)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(99,112,255,.45)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ghost{background:var(--bg2);color:var(--text1);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text0)}
+
+.input{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text0);font-family:var(--font-body);font-size:14px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s}
+.input:focus{border-color:var(--accent)}
+.input::placeholder{color:var(--text2)}
+select.input option{background:var(--bg1)}
+
+.label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px}
+
+.divider{height:1px;background:var(--border);margin:24px 0}
+
+/* Progress bar */
+.progress-wrap{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.progress-accent{background:linear-gradient(90deg,var(--accent),var(--cyan))}
+.progress-green{background:var(--green)}
+.progress-amber{background:var(--amber)}
+
+/* Loading */
+.spinner{width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;gap:16px;color:var(--text2)}
+.pulse-ring{width:60px;height:60px;border:2px solid var(--accent);border-radius:50%;animation:pulse-ring 1.5s ease infinite}
+@keyframes pulse-ring{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.3);opacity:0}}
+
+/* Empty state */
+.empty-state{text-align:center;padding:60px 40px;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-title{font-family:var(--font-display);font-size:18px;color:var(--text1);margin-bottom:8px}
+
+/* ── Home Page ───────────────────────────────────────────── */
+.hero{position:relative;padding:60px 0 40px;overflow:hidden}
+.hero-bg{position:absolute;top:-80px;right:-120px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,112,255,.07) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.hero-title{font-family:var(--font-display);font-size:48px;font-weight:800;line-height:1.1;letter-spacing:-1.5px;color:var(--text0);max-width:700px}
+.hero-desc{color:var(--text2);font-size:16px;max-width:520px;margin-top:16px;line-height:1.7}
+.hero-cta{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
+.stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
+.stat-num{font-family:var(--font-display);font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:12px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:.8px}
+
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.feature-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .25s}
+.feature-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.feature-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text0);margin-bottom:6px}
+.feature-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* ── Predict Page ────────────────────────────────────────── */
+.form-section{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px}
+.form-section-title{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text0);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.form-section-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.result-panel{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-top:24px}
+.career-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;margin-bottom:12px;cursor:pointer;transition:all .2s}
+.career-card:hover{border-color:var(--border2)}
+.career-card.top{border-color:rgba(99,112,255,.4);background:linear-gradient(135deg,rgba(99,112,255,.08),rgba(34,211,238,.04))}
+.career-rank{font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.career-name{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text0);margin-bottom:12px}
+.career-prob-bar{position:relative;height:8px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.career-prob-fill{position:absolute;left:0;top:0;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.career-prob-text{font-family:var(--font-display);font-size:13px;color:var(--text1);display:flex;justify-content:space-between}
+
+.xai-bar-item{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.xai-label{font-size:13px;color:var(--text1);width:200px;flex-shrink:0}
+.xai-bar-wrap{flex:1;height:8px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.xai-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent2),var(--pink));transition:width 1s ease}
+.xai-pct{font-size:12px;font-weight:600;color:var(--accent2);width:40px;text-align:right;flex-shrink:0}
+
+/* ── Career Insights Page ────────────────────────────────── */
+.career-header-card{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
+.career-header-bg{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(99,112,255,.1) 0%,transparent 70%)}
+.career-big-title{font-family:var(--font-display);font-size:36px;font-weight:800;letter-spacing:-1px;color:var(--text0)}
+.salary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.salary-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center}
+.salary-level{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.salary-amount{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text0)}
+
+.skill-tag{display:inline-flex;align-items:center;padding:5px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:500;color:var(--text1);margin:4px;transition:all .2s;cursor:default}
+.skill-tag:hover{border-color:var(--accent);color:var(--accent2)}
+.skill-tag.must{background:rgba(99,112,255,.08);border-color:rgba(99,112,255,.25);color:var(--accent2)}
+
+.roadmap-steps{display:flex;align-items:center;gap:0;margin-top:8px;flex-wrap:wrap}
+.roadmap-step{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 16px;font-size:13px;font-weight:500;color:var(--text1);white-space:nowrap}
+.roadmap-arrow{color:var(--text2);margin:0 8px;font-size:16px}
+.roadmap-step:first-child{border-color:var(--accent);color:var(--accent2)}
+.roadmap-step:last-child{border-color:var(--green);color:var(--green)}
+
+/* ── Scholarship Page ────────────────────────────────────── */
+.filter-bar{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;min-width:150px}
+.sch-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:all .2s;cursor:pointer}
+.sch-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.sch-name{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text0);margin-bottom:8px}
+.sch-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.sch-benefit{font-size:18px;font-weight:700;color:var(--green);margin-bottom:12px;font-family:var(--font-display)}
+.sch-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.sch-link{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600}
+.sch-link:hover{color:var(--cyan)}
+
+/* ── Learning Page ───────────────────────────────────────── */
+.skill-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.skill-chip{padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--text1);cursor:pointer;transition:all .2s}
+.skill-chip:hover{border-color:var(--border2);color:var(--text0)}
+.skill-chip.active{background:rgba(99,112,255,.15);border-color:var(--accent);color:var(--accent2)}
+.tab-row{display:flex;gap:4px;background:var(--bg2);padding:4px;border-radius:var(--radius-sm);margin-bottom:20px;border:1px solid var(--border)}
+.tab-btn{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text2);transition:all .2s;font-family:var(--font-body)}
+.tab-btn:hover{color:var(--text0)}
+.tab-btn.active{background:var(--bg1);color:var(--text0);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.resource-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all .2s;display:flex;flex-direction:column;gap:10px}
+.resource-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.resource-title{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text0)}
+.resource-provider{font-size:12px;color:var(--text2)}
+.resource-footer{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.free-badge{font-size:11px;padding:3px 8px;border-radius:4px;font-weight:700}
+.free-badge.free{background:rgba(52,211,153,.12);color:var(--green)}
+.free-badge.paid{background:rgba(251,191,36,.08);color:var(--amber)}
+
+/* ── Canvas charts ───────────────────────────────────────── */
+.chart-wrap{position:relative;width:100%}
+canvas{display:block}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+  .hero-title{font-size:32px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .page{padding:24px 20px}
+  .stats-row,.features-grid,.grid2,.grid3{grid-template-columns:1fr}
+  .form-grid,.form-grid-2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ── API CONFIG ──────────────────────────────────────────────────────────────
+// ★ CHANGE THIS to your deployed backend URL:
+//   e.g.  const API_BASE = 'https://careerai-backend.onrender.com/api/v1';
+//         const API_BASE = 'https://yourapp.railway.app/api/v1';
+//   Leave as null to use the built-in mock data (works offline).
+const API_BASE = null;
+
+// ── Mock API (works offline — swap API_BASE above for production) ────────────
+const mockAPI = {
+  async predict(student) {
+    await new Promise(r => setTimeout(r, 1800));
+    const careers = [
+      { rank:1, career:"Machine Learning Engineer", probability:72.4, match_label:"Strong Match" },
+      { rank:2, career:"Data Scientist",            probability:58.1, match_label:"Strong Match" },
+      { rank:3, career:"AI Researcher",             probability:41.7, match_label:"Good Match"   },
+    ];
+    const factors = [
+      { display_name:"Aptitude Score",       contribution_pct:28.4, direction:"positive" },
+      { display_name:"Overall GPA",          contribution_pct:22.1, direction:"positive" },
+      { display_name:"Tech Preference",      contribution_pct:18.6, direction:"positive" },
+      { display_name:"Coding Skills",        contribution_pct:14.2, direction:"positive" },
+      { display_name:"Analytical Personality",contribution_pct:10.5,direction:"positive" },
+      { display_name:"Degree",               contribution_pct:6.2,  direction:"positive" },
+    ];
+    return {
+      predictions: careers,
+      explanation: {
+        top_career: "Machine Learning Engineer",
+        factors,
+        explanation_text: "Your Aptitude Score, Overall GPA and Tech Preference are the strongest indicators that Machine Learning Engineer is a great fit for you."
+      }
+    };
+  },
+  async getCareers() {
+    return { careers: [
+      {career:"Data Scientist",job_demand:"Very High",salary_entry:"₹5L–₹10L"},
+      {career:"Software Engineer",job_demand:"Very High",salary_entry:"₹4L–₹8L"},
+      {career:"Machine Learning Engineer",job_demand:"Very High",salary_entry:"₹6L–₹12L"},
+      {career:"Web Developer",job_demand:"High",salary_entry:"₹3L–₹6L"},
+      {career:"Product Manager",job_demand:"High",salary_entry:"₹6L–₹12L"},
+      {career:"Cybersecurity Analyst",job_demand:"Very High",salary_entry:"₹4.5L–₹9L"},
+      {career:"UX Designer",job_demand:"High",salary_entry:"₹3.5L–₹7L"},
+      {career:"Cloud Architect",job_demand:"Very High",salary_entry:"₹7L–₹14L"},
+    ], total: 8 };
+  },
+  async getCareer(name) {
+    const data = {
+      "Data Scientist": {
+        career:"Data Scientist", description:"Analyzes large datasets to extract insights and build predictive ML models.",
+        required_skills:["Python","Statistics","Machine Learning","SQL","Data Visualization","Pandas"],
+        tools:["Jupyter","Scikit-learn","TensorFlow","Power BI","SQL Server","Git"],
+        roadmap:["Data Intern","Junior Data Scientist","Data Scientist","Senior Data Scientist","Lead DS","Chief Data Officer"],
+        salary:{entry:"₹5L–₹10L",mid:"₹12L–₹22L",senior:"₹25L–₹50L"},
+        job_demand:"Very High",
+      },
+      "Machine Learning Engineer": {
+        career:"Machine Learning Engineer", description:"Builds and deploys ML pipelines and models at scale in production.",
+        required_skills:["Python","Machine Learning","Deep Learning","MLOps","Docker","Cloud"],
+        tools:["TensorFlow","PyTorch","MLflow","AWS SageMaker","Kubernetes","Docker"],
+        roadmap:["ML Intern","Junior MLE","ML Engineer","Senior MLE","ML Architect","VP of AI"],
+        salary:{entry:"₹6L–₹12L",mid:"₹15L–₹28L",senior:"₹30L–₹60L"},
+        job_demand:"Very High",
+      },
+    };
+    return data[name] || data["Data Scientist"];
+  },
+  async getScholarships(f) {
+    await new Promise(r => setTimeout(r, 400));
+    return { total: 5, scholarships: [
+      {id:"SCH001",name:"National Scholarship Scheme",type:"Scholarship",provider:"Central Government",benefit:"₹25,000/year",deadline:"2025-10-31",deadline_urgency:"open",categories:["SC","ST","OBC"],description:"National scholarship for meritorious students.",link:"https://scholarships.gov.in"},
+      {id:"SCH003",name:"Pragati Scholarship (AICTE)",type:"Scholarship",provider:"AICTE",benefit:"₹50,000/year + ₹2,000/month",deadline:"2025-11-30",deadline_urgency:"open",categories:["All"],gender:"Female",description:"For female students in technical education.",link:"https://aicte-india.org"},
+      {id:"SCH004",name:"AI Skill Development (NIELIT)",type:"Skill Program",provider:"MeitY / NIELIT",benefit:"Free AI/ML Training",deadline:"Rolling",deadline_urgency:"rolling",categories:["All"],description:"Free government-sponsored AI training program.",link:"https://nielit.gov.in"},
+      {id:"SCH009",name:"Google Generation Scholarship",type:"Scholarship",provider:"Google India",benefit:"₹75,000 one-time",deadline:"2025-12-15",deadline_urgency:"open",categories:["All"],gender:"Female",description:"Google scholarship for women in tech.",link:"https://buildyourfuture.withgoogle.com"},
+      {id:"SCH013",name:"Infosys Foundation Scholarship",type:"Scholarship",provider:"Infosys Foundation",benefit:"₹1,00,000/year",deadline:"2026-01-31",deadline_urgency:"open",categories:["All"],description:"Engineering scholarship from Infosys.",link:"https://infosys.com/foundation"},
+    ]};
+  },
+  async getResources(career) {
+    return { total:8, required_skills:["Python","SQL","Machine Learning","Statistics","Data Visualization"],
+      resources:[
+        {id:"LR001",skill:"Python",title:"Python for Everybody",type:"Course",provider:"Coursera",difficulty:"Beginner",is_free:true,link:"https://coursera.org"},
+        {id:"LR003",skill:"Machine Learning",title:"ML Specialization — Andrew Ng",type:"Course",provider:"Coursera",difficulty:"Intermediate",is_free:true,link:"https://coursera.org"},
+        {id:"LR004",skill:"Machine Learning",title:"Hands-On Machine Learning",type:"Book",provider:"O'Reilly",difficulty:"Intermediate",is_free:false,link:"https://oreilly.com"},
+        {id:"LR005",skill:"SQL",title:"SQL for Data Analysis",type:"Course",provider:"Mode Analytics",difficulty:"Beginner",is_free:true,link:"https://mode.com"},
+        {id:"LR007",skill:"Statistics",title:"Statistics & Probability",type:"Course",provider:"Khan Academy",difficulty:"Beginner",is_free:true,link:"https://khanacademy.org"},
+        {id:"LR006",skill:"Deep Learning",title:"Deep Learning Specialization",type:"Course",provider:"DeepLearning.AI",difficulty:"Advanced",is_free:true,link:"https://coursera.org"},
+        {id:"LR012",skill:"Data Visualization",title:"Storytelling with Data",type:"Book",provider:"Cole Knaflic",difficulty:"Beginner",is_free:false,link:"https://storytellingwithdata.com"},
+        {id:"LR002",skill:"Python",title:"100 Days of Code",type:"Course",provider:"Udemy",difficulty:"Beginner",is_free:false,link:"https://udemy.com"},
+      ]
+    };
+  },
+  async getGlobalXAI() {
+    return { feature_importance: [
+      {display_name:"Creative Preference",importance_pct:9.84},
+      {display_name:"Tech Preference",importance_pct:8.71},
+      {display_name:"Business Preference",importance_pct:8.40},
+      {display_name:"Creative Personality",importance_pct:7.28},
+      {display_name:"Social Personality",importance_pct:7.00},
+      {display_name:"Analytical Personality",importance_pct:6.85},
+      {display_name:"Degree",importance_pct:5.41},
+      {display_name:"Aptitude Score",importance_pct:4.91},
+      {display_name:"Overall GPA",importance_pct:4.21},
+      {display_name:"Region",importance_pct:2.75},
+    ]};
+  }
+};
+const API = mockAPI;
+
+// ── SVG Icons ────────────────────────────────────────────────────────────────
+const Icons = {
+  Home: () => React.createElement('svg',{className:'nav-icon',viewBox:'0 0 20 20',fill:'currentColor'},React.createElement('path',{d:'M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z'})),
+  Brain: () => React.createElement('svg',{className:'nav-icon',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.8'},React.createElement('path',{d:'M9.5 2a4 4 0 014 4v1a4 4 0 01-4 4H6a4 4 0 01-4-4V6a4 4 0 014-4h3.5M14.5 2a4 4 0 014 4v1a4 4 0 01-4 4M9.5 11v10M14.5 2H18a4 4 0 014 4v1a4 4 0 01-4 4h-3.5M14.5 11v10'})),
+  Career: () => React.createElement('svg',{className:'nav-icon',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.8'},React.createElement('path',{d:'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z'})),
+  Scholar: () => React.createElement('svg',{className:'nav-icon',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.8'},React.createElement('path',{d:'M12 14l9-5-9-5-9 5 9 5z'}),React.createElement('path',{d:'M12 14l6.16-3.422A12.083 12.083 0 0122 21H2a12.083 12.083 0 013.84-10.422L12 14z'})),
+  Book: () => React.createElement('svg',{className:'nav-icon',viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:'1.8'},React.createElement('path',{d:'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'})),
+  Arrow: () => React.createElement('svg',{viewBox:'0 0 20 20',fill:'currentColor',style:{width:14,height:14}},React.createElement('path',{fillRule:'evenodd',d:'M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z',clipRule:'evenodd'})),
+};
+
+// ── Animated Probability Bar ─────────────────────────────────────────────────
+function ProbBar({ value, color = 'progress-accent', delay = 0 }) {
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const t = setTimeout(() => setWidth(value), delay + 100);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return React.createElement('div', { className: 'progress-wrap' },
+    React.createElement('div', { className: `progress-bar ${color}`, style: { width: `${width}%` } })
+  );
+}
+
+// ── Donut Chart ──────────────────────────────────────────────────────────────
+function DonutChart({ predictions }) {
+  const ref = useRef();
+  const chartRef = useRef();
+  useEffect(() => {
+    if (!ref.current || !predictions?.length) return;
+    if (chartRef.current) chartRef.current.destroy();
+    chartRef.current = new Chart(ref.current, {
+      type: 'doughnut',
+      data: {
+        labels: predictions.map(p => p.career),
+        datasets: [{ data: predictions.map(p => p.probability),
+          backgroundColor: ['rgba(99,112,255,0.85)','rgba(34,211,238,0.75)','rgba(167,139,250,0.6)'],
+          borderColor: 'transparent', borderWidth: 0, hoverOffset: 10 }]
+      },
+      options: {
+        responsive: true, cutout: '72%',
+        plugins: { legend: { display: false },
+          tooltip: { backgroundColor: '#1e2340', titleColor: '#f0f2ff', bodyColor: '#b8bcde',
+            borderColor: 'rgba(99,112,255,0.3)', borderWidth: 1 } },
+        animation: { animateRotate: true, duration: 1200, easing: 'easeInOutQuart' }
+      }
+    });
+    return () => chartRef.current?.destroy();
+  }, [predictions]);
+  return React.createElement('div', { className: 'chart-wrap', style: { maxWidth: 260, margin: '0 auto' } },
+    React.createElement('canvas', { ref })
+  );
+}
+
+// ── XAI Bar Chart ────────────────────────────────────────────────────────────
+function XAIChart({ factors }) {
+  const ref = useRef(); const chartRef = useRef();
+  useEffect(() => {
+    if (!ref.current || !factors?.length) return;
+    if (chartRef.current) chartRef.current.destroy();
+    const top = factors.slice(0, 8);
+    chartRef.current = new Chart(ref.current, {
+      type: 'bar',
+      data: {
+        labels: top.map(f => f.display_name),
+        datasets: [{ data: top.map(f => f.contribution_pct),
+          backgroundColor: top.map((_, i) => `rgba(${[167,99,34,99,167,34][i%3]},${[139,112,211,112,139,211][i%3]},${[250,255,238,255,250,238][i%3]},${0.9-i*0.06})`),
+          borderRadius: 6, borderSkipped: false }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true,
+        plugins: { legend: { display: false },
+          tooltip: { backgroundColor: '#1e2340', titleColor: '#f0f2ff', bodyColor: '#b8bcde',
+            borderColor: 'rgba(99,112,255,0.3)', borderWidth: 1,
+            callbacks: { label: ctx => ` ${ctx.raw.toFixed(1)}% influence` } } },
+        scales: {
+          x: { grid: { color: 'rgba(99,112,255,0.08)' }, ticks: { color: '#6b7099', font: { size: 11 } } },
+          y: { grid: { display: false }, ticks: { color: '#b8bcde', font: { size: 12 } } }
+        },
+        animation: { duration: 1000, easing: 'easeOutQuart' }
+      }
+    });
+    return () => chartRef.current?.destroy();
+  }, [factors]);
+  return React.createElement('div', { className: 'chart-wrap' },
+    React.createElement('canvas', { ref, style: { maxHeight: 280 } })
+  );
+}
+
+// ── Global XAI Chart ─────────────────────────────────────────────────────────
+function GlobalXAIChart({ data }) {
+  const ref = useRef(); const chartRef = useRef();
+  useEffect(() => {
+    if (!ref.current || !data?.length) return;
+    if (chartRef.current) chartRef.current.destroy();
+    chartRef.current = new Chart(ref.current, {
+      type: 'bar',
+      data: {
+        labels: data.map(d => d.display_name),
+        datasets: [{ data: data.map(d => d.importance_pct),
+          backgroundColor: data.map((_, i) => `hsla(${230+i*12},80%,${65-i*2}%,${0.85-i*0.04})`),
+          borderRadius: 6, borderSkipped: false }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(99,112,255,0.08)' }, ticks: { color: '#6b7099', font: { size: 11 } } },
+          y: { grid: { display: false }, ticks: { color: '#b8bcde', font: { size: 12 } } }
+        },
+        animation: { duration: 1200 }
+      }
+    });
+    return () => chartRef.current?.destroy();
+  }, [data]);
+  return React.createElement('div', { className: 'chart-wrap' },
+    React.createElement('canvas', { ref, style: { maxHeight: 320 } })
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE 1 — HOME
+// ═══════════════════════════════════════════════════════════════════════════
+function HomePage({ setPage }) {
+  return React.createElement('div', { className: 'page' },
+    React.createElement('div', { className: 'hero' },
+      React.createElement('div', { className: 'hero-bg' }),
+      React.createElement('div', { className: 'hero-eyebrow' }, '✦  AI-Powered Career Intelligence'),
+      React.createElement('h1', { className: 'hero-title' },
+        'Discover Your ', React.createElement('span', { className: 'accent-word' }, 'Perfect Career'), ' Path'
+      ),
+      React.createElement('p', { className: 'hero-desc' },
+        'One intelligent platform that uses machine learning to predict your ideal career, find scholarships, and build your personalized learning roadmap.'
+      ),
+      React.createElement('div', { className: 'hero-cta' },
+        React.createElement('button', { className: 'btn btn-primary', onClick: () => setPage('predict') },
+          '⚡  Predict My Career'
+        ),
+        React.createElement('button', { className: 'btn btn-ghost', onClick: () => setPage('scholarships') },
+          '🎓  Browse Scholarships'
+        )
+      )
+    ),
+
+    React.createElement('div', { className: 'stats-row' },
+      [['30+','Career Paths'],['15+','Scholarships'],['40+','Resources'],['3K+','Students']].map(([num, label]) =>
+        React.createElement('div', { className: 'stat-card', key: label },
+          React.createElement('div', { className: 'stat-num' }, num),
+          React.createElement('div', { className: 'stat-label' }, label)
+        )
+      )
+    ),
+
+    React.createElement('div', { className: 'features-grid', style: { marginTop: 48 } },
+      [
+        { icon: '⚡', color: '#6370ff', title: 'AI Career Prediction', desc: 'ML model analyzes your academic profile and predicts top 3 career matches with probability scores.' },
+        { icon: '🔍', color: '#22d3ee', title: 'Explainable AI', desc: 'See exactly which factors influenced your career prediction with interactive XAI charts.' },
+        { icon: '🎓', color: '#34d399', title: 'Scholarship Finder', desc: 'Automatically matches you with eligible government schemes and private scholarships.' },
+        { icon: '🗺️', color: '#a78bfa', title: 'Career Roadmap', desc: 'Visual skill dependency graph shows you the exact path from where you are to job-ready.' },
+        { icon: '📚', color: '#fbbf24', title: 'Learning Resources', desc: 'Curated courses, books, and videos mapped to the skills you need for your target career.' },
+        { icon: '📊', color: '#f472b6', title: 'Career Insights', desc: 'Detailed salary ranges, job demand trends, tools, and career progression for every path.' },
+      ].map(f =>
+        React.createElement('div', { className: 'feature-card', key: f.title,
+          onClick: () => setPage(f.title.includes('Prediction') || f.title.includes('AI') ? 'predict' : f.title.includes('Scholar') ? 'scholarships' : f.title.includes('Learn') || f.title.includes('Road') ? 'learning' : 'insights'),
+          style: { cursor: 'pointer' }
+        },
+          React.createElement('div', { className: 'feature-icon', style: { background: `${f.color}18` } }, f.icon),
+          React.createElement('div', { className: 'feature-title' }, f.title),
+          React.createElement('div', { className: 'feature-desc' }, f.desc)
+        )
+      )
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE 2 — AI PREDICTION
+// ═══════════════════════════════════════════════════════════════════════════
+function PredictPage({ setPage, setPrediction }) {
+  const [form, setForm] = useState({
+    Gender:'Female', Age:21, GPA:3.7, Math_GPA:3.8, English_GPA:3.5,
+    Science_GPA:3.6, Social_GPA:3.3, Aptitude_Score:85, College_Credits:105,
+    Degree:'B.Tech', Education_Level:'Undergraduate', Parent_Education:'Graduate',
+    Region:'Telangana', Income_Category:'5L-8L', Category:'OBC', Ethnicity:'OBC',
+    Skills_Coding:1, Skills_Design:0, Skills_Communication:1, Skills_Analysis:1, Skills_Leadership:0,
+    Personality_Analytical:8.0, Personality_Creative:5.5, Personality_Social:6.0,
+    Preferred_Tech:8.5, Preferred_Business:3.5, Preferred_Creative:3.0,
+  });
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [xaiData, setXaiData] = useState(null);
+  const [error, setError] = useState(null);
+
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const num = (k, v) => set(k, parseFloat(v) || 0);
+
+  async function handlePredict() {
+    setLoading(true); setError(null); setResult(null);
+    try {
+      const data = await API.predict(form);
+      setResult(data.predictions);
+      setXaiData(data.explanation);
+      setPrediction(data);
+    } catch(e) { setError(e.message); }
+    finally { setLoading(false); }
+  }
+
+  const Field = ({ label, k, type='text', opts }) =>
+    React.createElement('div', null,
+      React.createElement('label', { className: 'label' }, label),
+      opts
+        ? React.createElement('select', { className: 'input', value: form[k], onChange: e => set(k, e.target.value) },
+            opts.map(o => React.createElement('option', { key: o, value: o }, o))
+          )
+        : React.createElement('input', { className: 'input', type: type === 'num' ? 'number' : 'text',
+            value: form[k], onChange: e => type === 'num' ? num(k, e.target.value) : set(k, e.target.value),
+            step: k.includes('GPA') ? '0.1' : '1' })
+    );
+
+  const BinaryField = ({ label, k }) =>
+    React.createElement('div', null,
+      React.createElement('label', { className: 'label' }, label),
+      React.createElement('div', { className: 'flex gap8', style: { marginTop: 8 } },
+        [['Yes', 1],['No', 0]].map(([txt, val]) =>
+          React.createElement('button', { key: txt, className: `btn ${form[k] === val ? 'btn-primary' : 'btn-ghost'}`,
+            onClick: () => set(k, val), style: { padding: '8px 16px', fontSize: 13 }
+          }, txt)
+        )
+      )
+    );
+
+  return React.createElement('div', { className: 'page' },
+    React.createElement('div', { className: 'page-header' },
+      React.createElement('h1', { className: 'page-title' }, '⚡ ', React.createElement('span', { className: 'accent-word' }, 'AI Career'), ' Prediction'),
+      React.createElement('p', { className: 'page-sub' }, 'Fill in your academic profile. Our ML model will predict your top 3 career matches.')
+    ),
+
+    // Section 1 - Basic Info
+    React.createElement('div', { className: 'form-section' },
+      React.createElement('div', { className: 'form-section-title' },
+        React.createElement('div', { className: 'form-section-num' }, '1'),
+        'Basic Information'
+      ),
+      React.createElement('div', { className: 'form-grid' },
+        React.createElement(Field, { label:'Gender', k:'Gender', opts:['Male','Female','Other'] }),
+        React.createElement(Field, { label:'Age', k:'Age', type:'num' }),
+        React.createElement(Field, { label:'Degree', k:'Degree', opts:['B.Tech','B.E','B.Sc','B.Com','B.A','BCA','MCA','M.Tech','MBA','Diploma'] }),
+        React.createElement(Field, { label:'Education Level', k:'Education_Level', opts:['High School','Undergraduate','Postgraduate','Diploma'] }),
+        React.createElement(Field, { label:'Region', k:'Region', opts:['Telangana','Maharashtra','Karnataka','Tamil Nadu','Delhi','Gujarat','Kerala','West Bengal','Rajasthan','Punjab'] }),
+        React.createElement(Field, { label:'Income Category', k:'Income_Category', opts:['Below 1L','1L-2.5L','2.5L-5L','5L-8L','8L-15L','Above 15L'] }),
+        React.createElement(Field, { label:'Category', k:'Category', opts:['General','OBC','SC','ST','EWS'] }),
+        React.createElement(Field, { label:'Parent Education', k:'Parent_Education', opts:['Illiterate','Non-Graduate','Graduate','Post-Graduate'] }),
+      )
+    ),
+
+    // Section 2 - Academic
+    React.createElement('div', { className: 'form-section' },
+      React.createElement('div', { className: 'form-section-title' },
+        React.createElement('div', { className: 'form-section-num' }, '2'),
+        'Academic Performance'
+      ),
+      React.createElement('div', { className: 'form-grid' },
+        React.createElement(Field, { label:'Overall GPA (0–4.0)', k:'GPA', type:'num' }),
+        React.createElement(Field, { label:'Math GPA', k:'Math_GPA', type:'num' }),
+        React.createElement(Field, { label:'English GPA', k:'English_GPA', type:'num' }),
+        React.createElement(Field, { label:'Science GPA', k:'Science_GPA', type:'num' }),
+        React.createElement(Field, { label:'Social Science GPA', k:'Social_GPA', type:'num' }),
+        React.createElement(Field, { label:'Aptitude Score (0–100)', k:'Aptitude_Score', type:'num' }),
+        React.createElement(Field, { label:'College Credits', k:'College_Credits', type:'num' }),
+      )
+    ),
+
+    // Section 3 - Skills & Personality
+    React.createElement('div', { className: 'form-section' },
+      React.createElement('div', { className: 'form-section-title' },
+        React.createElement('div', { className: 'form-section-num' }, '3'),
+        'Skills & Personality'
+      ),
+      React.createElement('div', { className: 'form-grid' },
+        React.createElement(BinaryField, { label:'Coding Skills', k:'Skills_Coding' }),
+        React.createElement(BinaryField, { label:'Design Skills', k:'Skills_Design' }),
+        React.createElement(BinaryField, { label:'Communication', k:'Skills_Communication' }),
+        React.createElement(BinaryField, { label:'Analytical Skills', k:'Skills_Analysis' }),
+        React.createElement(BinaryField, { label:'Leadership Skills', k:'Skills_Leadership' }),
+      ),
+      React.createElement('div', { className: 'divider' }),
+      React.createElement('div', { className: 'form-grid' },
+        React.createElement(Field, { label:'Analytical Personality (0–10)', k:'Personality_Analytical', type:'num' }),
+        React.createElement(Field, { label:'Creative Personality (0–10)', k:'Personality_Creative', type:'num' }),
+        React.createElement(Field, { label:'Social Personality (0–10)', k:'Personality_Social', type:'num' }),
+        React.createElement(Field, { label:'Tech Preference (0–10)', k:'Preferred_Tech', type:'num' }),
+        React.createElement(Field, { label:'Business Preference (0–10)', k:'Preferred_Business', type:'num' }),
+        React.createElement(Field, { label:'Creative Preference (0–10)', k:'Preferred_Creative', type:'num' }),
+      )
+    ),
+
+    React.createElement('button', { className: 'btn btn-primary', onClick: handlePredict,
+      disabled: loading, style: { fontSize: 15, padding: '14px 32px' }
+    }, loading ? '🔄  Analyzing Your Profile...' : '⚡  Predict My Career Path'),
+
+    error && React.createElement('div', { style: { background:'rgba(248,113,113,.1)', border:'1px solid rgba(248,113,113,.3)', borderRadius:8, padding:'12px 16px', marginTop:16, color:'#f87171', fontSize:13 }}, `⚠ ${error}`),
+
+    // Results
+    result && React.createElement('div', { className: 'result-panel', style: { marginTop: 32 } },
+      React.createElement('div', { className: 'grid2', style: { gap: 32 } },
+        // Left: Career cards + donut
+        React.createElement('div', null,
+          React.createElement('div', { className: 'card-title' }, 'Your Top Career Matches'),
+          result.map((p, i) =>
+            React.createElement('div', { key: p.career, className: `career-card ${i===0?'top':''}`,
+              onClick: () => setPage('insights')
+            },
+              React.createElement('div', { className: 'career-rank' }, `#${p.rank} ${p.match_label}`),
+              React.createElement('div', { className: 'career-name' }, p.career),
+              React.createElement('div', { className: 'career-prob-bar' },
+                React.createElement('div', { className: 'career-prob-fill', style: { width: `${p.probability}%` } })
+              ),
+              React.createElement('div', { className: 'career-prob-text' },
+                React.createElement('span', null, 'Match probability'),
+                React.createElement('span', { style:{color:'var(--accent)',fontWeight:700} }, `${p.probability}%`)
+              )
+            )
+          ),
+          React.createElement(DonutChart, { predictions: result })
+        ),
+
+        // Right: XAI
+        React.createElement('div', null,
+          React.createElement('div', { className: 'card-title' }, 'Why These Careers?'),
+          React.createElement('div', { style:{background:'rgba(99,112,255,.07)',border:'1px solid rgba(99,112,255,.15)',borderRadius:8,padding:14,marginBottom:20,fontSize:13,color:'var(--text1)',lineHeight:1.7} },
+            xaiData?.explanation_text
+          ),
+          React.createElement(XAIChart, { factors: xaiData?.factors }),
+          React.createElement('button', { className: 'btn btn-ghost', style:{marginTop:16},
+            onClick: () => setPage('insights')
+          }, 'View Career Insights →')
+        )
+      )
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE 3 — CAREER INSIGHTS
+// ═══════════════════════════════════════════════════════════════════════════
+function InsightsPage({ prediction, setPage }) {
+  const [career, setCareer] = useState(null);
+  const [allCareers, setAllCareers] = useState([]);
+  const [selected, setSelected] = useState('Data Scientist');
+  const [loading, setLoading] = useState(false);
+  const [xaiData, setXaiData] = useState(null);
+
+  useEffect(() => {
+    API.getCareers().then(d => setAllCareers(d.careers || []));
+    API.getGlobalXAI().then(d => setXaiData(d.feature_importance));
+    if (prediction?.predictions?.[0]) setSelected(prediction.predictions[0].career);
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    API.getCareer(selected)
+      .then(d => { setCareer(d); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [selected]);
+
+  const demandColor = d => d === 'Very High' ? 'badge-green' : d === 'High' ? 'badge-cyan' : 'badge-amber';
+
+  return React.createElement('div', { className: 'page' },
+    React.createElement('div', { className: 'page-header' },
+      React.createElement('h1', { className: 'page-title' }, '🗺️ Career ', React.createElement('span', { className: 'accent-word' }, 'Insights')),
+      React.createElement('p', { className: 'page-sub' }, 'Deep-dive into any career — skills, tools, salary, roadmap and demand.')
+    ),
+
+    // Career selector
+    React.createElement('div', { className: 'card', style:{marginBottom:24} },
+      React.createElement('label', { className: 'label', style:{marginBottom:8} }, 'Select Career to Explore'),
+      React.createElement('div', { style:{display:'flex',flexWrap:'wrap',gap:8} },
+        allCareers.map(c =>
+          React.createElement('button', { key: c.career,
+            className: `skill-chip ${selected===c.career?'active':''}`,
+            onClick: () => setSelected(c.career)
+          }, c.career)
+        )
+      )
+    ),
+
+    loading && React.createElement('div', { className: 'loading-state' },
+      React.createElement('div', { className: 'pulse-ring' }),
+      React.createElement('span', null, 'Loading career data...')
+    ),
+
+    career && !loading && React.createElement('div', null,
+      // Header card
+      React.createElement('div', { className: 'career-header-card' },
+        React.createElement('div', { className: 'career-header-bg' }),
+        React.createElement('div', { className: 'flex gap12', style:{marginBottom:12,flexWrap:'wrap'} },
+          React.createElement('span', { className: `badge ${demandColor(career.job_demand)}` }, `📈 ${career.job_demand} Demand`),
+          prediction?.predictions?.find(p=>p.career===career.career) &&
+            React.createElement('span', { className:'badge badge-accent' }, `⚡ ${prediction.predictions.find(p=>p.career===career.career).probability}% match for you`)
+        ),
+        React.createElement('div', { className: 'career-big-title' }, career.career),
+        React.createElement('p', { style:{color:'var(--text2)',marginTop:10,maxWidth:600,fontSize:14,lineHeight:1.7} }, career.description),
+        React.createElement('div', { className: 'salary-grid', style:{marginTop:24} },
+          [['Entry Level',career.salary?.entry],['Mid Level',career.salary?.mid],['Senior Level',career.salary?.senior]].map(([l,v]) =>
+            React.createElement('div', { className:'salary-box', key:l },
+              React.createElement('div',{className:'salary-level'},l),
+              React.createElement('div',{className:'salary-amount'},v)
+            )
+          )
+        )
+      ),
+
+      React.createElement('div', { className: 'grid2', style:{gap:20} },
+        // Required Skills
+        React.createElement('div', { className: 'card' },
+          React.createElement('div', { className: 'card-title' }, 'Required Skills'),
+          React.createElement('div', null,
+            career.required_skills?.map((s, i) =>
+              React.createElement('span', { key: s, className: `skill-tag ${i<3?'must':''}` }, s)
+            )
+          ),
+          React.createElement('div', { style:{marginTop:12,fontSize:12,color:'var(--text2)'} }, '✦ Bold = must-have skills')
+        ),
+
+        // Tools
+        React.createElement('div', { className: 'card' },
+          React.createElement('div', { className: 'card-title' }, 'Tools & Technologies'),
+          React.createElement('div', null,
+            career.tools?.map(t =>
+              React.createElement('span', { key: t, className: 'skill-tag' }, t)
+            )
+          )
+        )
+      ),
+
+      // Career Roadmap
+      React.createElement('div', { className: 'card mt20' },
+        React.createElement('div', { className: 'card-title' }, 'Career Progression Roadmap'),
+        React.createElement('div', { className: 'roadmap-steps' },
+          career.roadmap?.map((step, i) =>
+            React.createElement(React.Fragment, { key: step },
+              React.createElement('div', { className: 'roadmap-step' }, step),
+              i < career.roadmap.length - 1 && React.createElement('span', { className: 'roadmap-arrow' }, '→')
+            )
+          )
+        )
+      ),
+
+      // Global XAI
+      xaiData && React.createElement('div', { className: 'card mt20' },
+        React.createElement('div', { className: 'card-title' }, 'Global Feature Importance (XAI)'),
+        React.createElement('p', { style:{fontSize:13,color:'var(--text2)',marginBottom:16} }, 'These features most influence career predictions across all students.'),
+        React.createElement(GlobalXAIChart, { data: xaiData })
+      ),
+
+      React.createElement('div', { className: 'flex gap12 mt20', style:{flexWrap:'wrap'} },
+        React.createElement('button', { className: 'btn btn-primary', onClick: () => setPage('learning') }, '📚 Start Learning Path'),
+        React.createElement('button', { className: 'btn btn-ghost', onClick: () => setPage('scholarships') }, '🎓 Find Scholarships'),
+      )
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE 4 — SCHOLARSHIPS
+// ═══════════════════════════════════════════════════════════════════════════
+function ScholarshipsPage() {
+  const [scholarships, setScholarships] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({ education_level:'', gender:'', category:'', type:'' });
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+    API.getScholarships(filters).then(d => {
+      setScholarships(d.scholarships || []);
+      setLoading(false);
+    });
+  }, [filters]);
+
+  const setF = (k, v) => setFilters(f => ({ ...f, [k]: v }));
+
+  const urgencyBadge = u => {
+    if (u === 'urgent') return React.createElement('span', { className: 'badge badge-red' }, '🔴 Urgent');
+    if (u === 'soon')   return React.createElement('span', { className: 'badge badge-amber' }, '🟡 Closing Soon');
+    if (u === 'rolling')return React.createElement('span', { className: 'badge badge-cyan' }, '🔵 Rolling');
+    return React.createElement('span', { className: 'badge badge-green' }, '🟢 Open');
+  };
+
+  const typeBadge = t => {
+    const map = { Scholarship:'badge-accent', 'Skill Program':'badge-green', Internship:'badge-amber', Fellowship:'badge-pink' };
+    return React.createElement('span', { className: `badge ${map[t]||'badge-accent'}` }, t);
+  };
+
+  const filtered = scholarships.filter(s =>
+    !search || s.name.toLowerCase().includes(search.toLowerCase()) ||
+    s.description.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return React.createElement('div', { className: 'page' },
+    React.createElement('div', { className: 'page-header' },
+      React.createElement('h1', { className: 'page-title' }, '🎓 Scholarship ', React.createElement('span', { className: 'accent-word' }, 'Finder')),
+      React.createElement('p', { className: 'page-sub' }, 'Personalized scholarships and government schemes matched to your profile.')
+    ),
+
+    // Filters
+    React.createElement('div', { className: 'filter-bar' },
+      React.createElement('div', { style:{flex:'1 1 200px'} },
+        React.createElement('label', { className: 'label' }, 'Search'),
+        React.createElement('input', { className: 'input', placeholder: 'Search schemes...', value: search, onChange: e => setSearch(e.target.value) })
+      ),
+      ...[
+        ['Education', 'education_level', ['','High School','Undergraduate','Postgraduate']],
+        ['Gender', 'gender', ['','Male','Female']],
+        ['Category', 'category', ['','General','OBC','SC','ST','EWS']],
+        ['Type', 'type', ['','Scholarship','Skill Program','Internship','Fellowship']],
+      ].map(([label, key, opts]) =>
+        React.createElement('div', { className: 'filter-group', key: key },
+          React.createElement('label', { className: 'label' }, label),
+          React.createElement('select', { className: 'input', value: filters[key], onChange: e => setF(key, e.target.value) },
+            opts.map(o => React.createElement('option', { key: o, value: o }, o || `All ${label}s`))
+          )
+        )
+      ),
+      React.createElement('button', { className: 'btn btn-ghost', onClick: () => { setFilters({education_level:'',gender:'',category:'',type:''}); setSearch(''); } }, 'Reset')
+    ),
+
+    React.createElement('div', { style:{color:'var(--text2)',fontSize:13,marginBottom:16} },
+      `${filtered.length} ${filtered.length===1?'opportunity':'opportunities'} found`
+    ),
+
+    loading
+      ? React.createElement('div', { className: 'loading-state' }, React.createElement('div', { className: 'spinner' }), React.createElement('span', null, 'Loading...'))
+      : filtered.length === 0
+        ? React.createElement('div', { className: 'empty-state' }, React.createElement('div', { className: 'empty-icon' }, '🔍'), React.createElement('div', { className: 'empty-title' }, 'No scholarships found'), React.createElement('p', null, 'Try adjusting your filters'))
+        : React.createElement('div', { className: 'grid2' },
+            filtered.map(s =>
+              React.createElement('div', { className: 'sch-card', key: s.id },
+                React.createElement('div', { className: 'sch-meta' },
+                  typeBadge(s.type),
+                  urgencyBadge(s.deadline_urgency),
+                ),
+                React.createElement('div', { className: 'sch-name' }, s.name),
+                React.createElement('div', { className: 'sch-benefit' }, s.benefit),
+                React.createElement('div', { style:{fontSize:12,color:'var(--text2)',lineHeight:1.6} }, s.description),
+                React.createElement('div', { className: 'sch-footer' },
+                  React.createElement('span', { style:{fontSize:12,color:'var(--text2)'} },
+                    `By ${s.provider}  ·  ${s.deadline === 'Rolling' ? 'Rolling admissions' : `Deadline: ${s.deadline}`}`
+                  ),
+                  React.createElement('a', { href: s.link, target:'_blank', rel:'noopener', className:'sch-link' }, 'Apply Now →')
+                )
+              )
+            )
+          )
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE 5 — LEARNING ROADMAP
+// ═══════════════════════════════════════════════════════════════════════════
+function LearningPage({ prediction }) {
+  const [resources, setResources] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('All');
+  const [activeSkill, setActiveSkill] = useState('All');
+  const [completed, setCompleted] = useState({});
+
+  const career = prediction?.predictions?.[0]?.career || 'Data Scientist';
+
+  useEffect(() => {
+    setLoading(true);
+    API.getResources(career).then(d => { setResources(d); setLoading(false); });
+  }, [career]);
+
+  const tabs = ['All', 'Course', 'Book', 'Video', 'Certification'];
+  const skills = ['All', ...(resources?.required_skills || [])];
+
+  const filtered = (resources?.resources || []).filter(r => {
+    const tabOk   = activeTab === 'All' || r.type === activeTab;
+    const skillOk = activeSkill === 'All' || r.skill === activeSkill;
+    return tabOk && skillOk;
+  });
+
+  const toggleComplete = id => setCompleted(c => ({ ...c, [id]: !c[id] }));
+  const completedCount = Object.values(completed).filter(Boolean).length;
+
+  const diffBadge = d => {
+    const map = { Beginner:'badge-green', Intermediate:'badge-amber', Advanced:'badge-red' };
+    return React.createElement('span', { className: `badge ${map[d]||'badge-accent'}`, style:{fontSize:10} }, d);
+  };
+
+  return React.createElement('div', { className: 'page' },
+    React.createElement('div', { className: 'page-header' },
+      React.createElement('h1', { className: 'page-title' }, '📚 Learning ', React.createElement('span', { className: 'accent-word' }, 'Roadmap')),
+      React.createElement('p', { className: 'page-sub' }, `Personalized learning path for: ${career}`)
+    ),
+
+    // Progress tracker
+    React.createElement('div', { className: 'card', style:{marginBottom:24} },
+      React.createElement('div', { className: 'flex gap16', style:{flexWrap:'wrap',justifyContent:'space-between',alignItems:'center',marginBottom:16} },
+        React.createElement('div', null,
+          React.createElement('div', { style:{fontFamily:'var(--font-display)',fontSize:20,fontWeight:800,color:'var(--text0)'} }, `${completedCount} / ${(resources?.resources||[]).length}`),
+          React.createElement('div', { style:{fontSize:12,color:'var(--text2)',marginTop:2} }, 'Resources completed')
+        ),
+        React.createElement('div', { style:{flex:1,maxWidth:300} },
+          React.createElement(ProbBar, { value: resources ? (completedCount / resources.resources.length * 100) : 0, delay: 0 })
+        ),
+        React.createElement('span', { className: 'badge badge-accent' }, `${career}`)
+      ),
+      resources?.required_skills && React.createElement('div', null,
+        React.createElement('div', { style:{fontSize:12,color:'var(--text2)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.5px',fontWeight:600} }, 'Skills to master'),
+        React.createElement('div', null,
+          resources.required_skills.map(s =>
+            React.createElement('span', { key: s, className: 'skill-tag must' }, s)
+          )
+        )
+      )
+    ),
+
+    // Skill chips
+    loading ? null : React.createElement('div', { className: 'skill-filter-row' },
+      skills.map(s =>
+        React.createElement('button', { key: s, className: `skill-chip ${activeSkill===s?'active':''}`,
+          onClick: () => setActiveSkill(s)
+        }, s)
+      )
+    ),
+
+    // Type tabs
+    loading ? null : React.createElement('div', { className: 'tab-row' },
+      tabs.map(t =>
+        React.createElement('button', { key: t, className: `tab-btn ${activeTab===t?'active':''}`,
+          onClick: () => setActiveTab(t)
+        }, t)
+      )
+    ),
+
+    loading
+      ? React.createElement('div', { className: 'loading-state' }, React.createElement('div', { className: 'spinner' }), React.createElement('span', null, 'Loading resources...'))
+      : filtered.length === 0
+        ? React.createElement('div', { className: 'empty-state' }, React.createElement('div', { className: 'empty-icon' }, '📖'), React.createElement('div', { className: 'empty-title' }, 'No resources for this filter'))
+        : React.createElement('div', { className: 'grid3' },
+            filtered.map(r =>
+              React.createElement('div', { key: r.id,
+                className: 'resource-card',
+                style: completed[r.id] ? {opacity:.6,border:'1px solid var(--green)'} : {}
+              },
+                React.createElement('div', { className: 'flex gap8', style:{flexWrap:'wrap'} },
+                  React.createElement('span', { className: 'badge badge-accent', style:{fontSize:10} }, r.type),
+                  diffBadge(r.difficulty),
+                ),
+                React.createElement('div', { className: 'resource-title' }, r.title),
+                React.createElement('div', { className: 'resource-provider' }, r.provider),
+                React.createElement('div', { className: 'resource-footer' },
+                  React.createElement('span', { className: `free-badge ${r.is_free?'free':'paid'}` }, r.is_free ? '✦ Free' : '$ Paid'),
+                  React.createElement('div', { className: 'flex gap8' },
+                    React.createElement('a', { href: r.link, target:'_blank', rel:'noopener',
+                      className: 'btn btn-primary', style:{padding:'6px 12px',fontSize:12}
+                    }, 'Start →'),
+                    React.createElement('button', { className: 'btn btn-ghost',
+                      style:{padding:'6px 10px',fontSize:11},
+                      onClick: () => toggleComplete(r.id)
+                    }, completed[r.id] ? '✓ Done' : 'Mark Done')
+                  )
+                )
+              )
+            )
+          )
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ROOT APP
+// ═══════════════════════════════════════════════════════════════════════════
+function App() {
+  const [page, setPage] = useState('home');
+  const [prediction, setPrediction] = useState(null);
+
+  const navItems = [
+    { id:'home',        label:'Home',          icon: Icons.Home    },
+    { id:'predict',     label:'AI Prediction', icon: Icons.Brain   },
+    { id:'insights',    label:'Career Insights',icon: Icons.Career },
+    { id:'scholarships',label:'Scholarships',  icon: Icons.Scholar },
+    { id:'learning',    label:'Learning Roadmap',icon: Icons.Book  },
+  ];
+
+  const pages = { home: HomePage, predict: PredictPage, insights: InsightsPage, scholarships: ScholarshipsPage, learning: LearningPage };
+  const PageComp = pages[page] || HomePage;
+
+  return React.createElement('div', { className: 'app' },
+    // Sidebar
+    React.createElement('aside', { className: 'sidebar' },
+      React.createElement('div', { className: 'sidebar-logo' },
+        React.createElement('div', { className: 'logo-mark' }, 'CareerAI'),
+        React.createElement('div', { className: 'logo-sub' }, 'Student Intelligence Platform')
+      ),
+      React.createElement('nav', { className: 'sidebar-nav' },
+        navItems.map(item =>
+          React.createElement('div', { key: item.id,
+            className: `nav-item ${page === item.id ? 'active' : ''}`,
+            onClick: () => setPage(item.id)
+          },
+            React.createElement(item.icon),
+            item.label
+          )
+        )
+      ),
+      React.createElement('div', { className: 'sidebar-footer' },
+        React.createElement('div', { className: 'profile-pill' },
+          React.createElement('div', { className: 'avatar' }, 'S'),
+          React.createElement('div', null,
+            React.createElement('div', { className: 'profile-name' }, 'Student'),
+            React.createElement('div', { className: 'profile-role' }, prediction ? `${prediction.predictions[0].career}` : 'Profile incomplete')
+          )
+        )
+      )
+    ),
+
+    // Main
+    React.createElement('main', { className: 'main' },
+      React.createElement(PageComp, { setPage, prediction, setPrediction })
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>
