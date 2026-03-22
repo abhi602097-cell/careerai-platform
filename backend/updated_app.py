@@ -12,9 +12,12 @@ from routes.auth_routes import auth          # ← NEW
 from models.user_model import init_db        # ← NEW
 from datetime import datetime, timezone
 
+from routes.admin_routes import admin              # ← top of file, with other imports
+
 def create_app():
     app = Flask(__name__)
     app.config["JSON_SORT_KEYS"] = False
+    app.register_blueprint(admin, url_prefix="/api/v1/admin")   # ← only this line inside
 
     # ── CORS ─────────────────────────────────────────────────────────────────
     @app.after_request
