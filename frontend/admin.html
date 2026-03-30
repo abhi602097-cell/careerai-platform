@@ -134,7 +134,14 @@ const PageComp=pages[page]||OverviewPage;const pageTitle=navItems.find(n=>n.id==
 if(!user)return React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}},React.createElement('div',{className:'spinner'}));
 return React.createElement('div',{style:{display:'flex',height:'100vh'}},React.createElement('aside',{className:'sidebar'},React.createElement('div',{className:'sidebar-top'},React.createElement('div',null,React.createElement('span',{className:'logo-mark'},'CareerAI'),React.createElement('span',{className:'logo-badge'},'Admin'))),React.createElement('nav',{className:'sidebar-nav'},React.createElement('div',{className:'nav-section'},'Management'),navItems.map(item=>React.createElement('div',{key:item.id,className:`nav-item ${page===item.id?'active':''}`,onClick:()=>setPage(item.id)},React.createElement('span',{className:'nav-icon'},item.icon),item.label)),React.createElement('div',{className:'nav-section'},'Platform'),React.createElement('div',{className:'nav-item',onClick:()=>window.open('https://splendorous-meerkat-321335.netlify.app','_blank')},React.createElement('span',{className:'nav-icon'},'🌐'),'Live Site ↗')),React.createElement('div',{className:'sidebar-footer'},React.createElement('div',{className:'admin-pill'},React.createElement('div',{className:'admin-avatar'},user?.avatar_initials||'A'),React.createElement('div',null,React.createElement('div',{className:'admin-name'},user?.name?.split(' ')[0]||'Admin'),React.createElement('div',{className:'admin-role'},'Administrator'))))),React.createElement('div',{className:'main'},React.createElement('div',{className:'topbar'},React.createElement('div',{className:'topbar-title'},pageTitle),React.createElement('div',{className:'topbar-right'},React.createElement('div',{className:'topbar-time'},`🕐 ${time}`),React.createElement('button',{className:'logout-btn',onClick:handleLogout},'Sign out'))),React.createElement('div',{className:'content'},React.createElement(PageComp))));}
 
-ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+  } catch(e) {
+    document.getElementById('root').innerHTML = '<div style="color:white;padding:40px;font-family:sans-serif">Error: ' + e.message + '</div>';
+    console.error(e);
+  }
+});
 </script>
 </body>
 </html>
