@@ -5,115 +5,78 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>CareerAI — Sign In</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
 <style>
 :root{
-  --bg0:#07080f;--bg1:#0d0f1c;--bg2:#12152b;--bg3:#181c36;--bg4:#1e2340;
+  --bg0:#07080f;--bg1:#0d0f1c;--bg2:#12152b;--bg3:#181c36;
   --border:rgba(99,112,255,.18);--border2:rgba(99,112,255,.35);
   --accent:#6370ff;--accent2:#a78bfa;--cyan:#22d3ee;--green:#34d399;
-  --amber:#fbbf24;--red:#f87171;--pink:#f472b6;
+  --amber:#fbbf24;--red:#f87171;
   --text0:#f0f2ff;--text1:#b8bcde;--text2:#6b7099;
   --font-d:'Syne',sans-serif;--font-b:'DM Sans',sans-serif;
   --r:14px;--r-sm:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg0);color:var(--text0);font-family:var(--font-b);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-
-/* Background orbs */
 .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
 .orb1{width:500px;height:500px;background:rgba(99,112,255,.06);top:-100px;left:-150px}
 .orb2{width:400px;height:400px;background:rgba(34,211,238,.04);bottom:-80px;right:-100px}
-.orb3{width:300px;height:300px;background:rgba(167,139,250,.05);top:40%;left:60%}
-
-/* Card */
 .auth-wrap{position:relative;z-index:1;width:100%;max-width:460px;padding:20px}
 .auth-card{background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:40px;animation:fadeUp .4s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* Logo */
 .logo{text-align:center;margin-bottom:32px}
 .logo-mark{font-family:var(--font-d);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo-sub{font-size:11px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
-
-/* Heading */
 .auth-title{font-family:var(--font-d);font-size:26px;font-weight:800;color:var(--text0);letter-spacing:-.5px;margin-bottom:6px}
 .auth-sub{font-size:14px;color:var(--text2);margin-bottom:28px}
-
-/* Form */
 .field{margin-bottom:16px}
 .field label{display:block;font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
 .input-wrap{position:relative}
 .input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text0);font-family:var(--font-b);font-size:14px;padding:12px 14px;outline:none;transition:border-color .2s,box-shadow .2s}
 .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,112,255,.12)}
 .input::placeholder{color:var(--text2)}
-.input.error{border-color:var(--red)}
 .input-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px;cursor:pointer;user-select:none}
-
-/* Password strength */
 .strength-bar{display:flex;gap:4px;margin-top:6px}
 .strength-seg{height:3px;flex:1;border-radius:99px;background:var(--bg3);transition:background .3s}
 .strength-seg.weak{background:var(--red)}
 .strength-seg.fair{background:var(--amber)}
 .strength-seg.strong{background:var(--green)}
 .strength-label{font-size:11px;color:var(--text2);margin-top:4px}
-
-/* Checkbox */
 .check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
 .check-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);margin-top:2px;flex-shrink:0;cursor:pointer}
 .check-row label{font-size:13px;color:var(--text1);cursor:pointer;line-height:1.5}
 .check-row a{color:var(--accent);text-decoration:none}
-.check-row a:hover{color:var(--cyan)}
-
-/* Button */
-.btn{width:100%;padding:13px;border-radius:var(--r-sm);font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:var(--font-b);transition:all .2s;letter-spacing:.2px}
+.btn{width:100%;padding:13px;border-radius:var(--r-sm);font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:var(--font-b);transition:all .2s}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#4f46e5);color:white;box-shadow:0 4px 20px rgba(99,112,255,.3)}
-.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 28px rgba(99,112,255,.45)}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
-
-/* Divider */
 .divider{display:flex;align-items:center;gap:12px;margin:20px 0}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .divider span{font-size:12px;color:var(--text2)}
-
-/* Social btn */
 .btn-social{width:100%;padding:11px;border-radius:var(--r-sm);font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--bg2);color:var(--text1);font-family:var(--font-b);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn-social:hover{border-color:var(--border2);color:var(--text0)}
-
-/* Switch page */
 .switch-text{text-align:center;margin-top:24px;font-size:14px;color:var(--text2)}
 .switch-text a{color:var(--accent);text-decoration:none;font-weight:600}
-.switch-text a:hover{color:var(--cyan)}
-
-/* Error / success banners */
-.banner{padding:12px 14px;border-radius:var(--r-sm);font-size:13px;margin-bottom:16px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.banner{padding:12px 14px;border-radius:var(--r-sm);font-size:13px;margin-bottom:16px;line-height:1.5}
 .banner-error{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red)}
 .banner-success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--green)}
-
-/* Role selector */
 .role-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .role-btn{padding:12px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text1);cursor:pointer;text-align:center;transition:all .2s;font-family:var(--font-b)}
 .role-btn.active{border-color:var(--accent);background:rgba(99,112,255,.12);color:var(--accent2)}
-.role-btn .role-icon{font-size:20px;display:block;margin-bottom:4px}
-.role-btn .role-label{font-size:13px;font-weight:600}
-.role-btn .role-desc{font-size:11px;color:var(--text2);margin-top:2px}
-
-/* Spinner */
+.role-icon{font-size:20px;display:block;margin-bottom:4px}
+.role-label{font-size:13px;font-weight:600}
+.role-desc{font-size:11px;color:var(--text2);margin-top:2px}
 .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Progress ring (profile completion) */
 .completion-ring{position:relative;width:64px;height:64px}
 .completion-ring svg{transform:rotate(-90deg)}
 .completion-ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--text0)}
-
-/* Dashboard */
 .dash-wrap{position:relative;z-index:1;width:100%;max-width:900px;padding:32px 20px}
-.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:gap}
+.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:12px}
 .dash-greeting{font-family:var(--font-d);font-size:30px;font-weight:800;letter-spacing:-.5px}
 .dash-greeting span{background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logout-btn{padding:8px 18px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text1);cursor:pointer;font-size:13px;font-weight:500;font-family:var(--font-b);transition:all .2s}
-.logout-btn:hover{border-color:var(--border2);color:var(--text0)}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:20px}
 .stat-num{font-family:var(--font-d);font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -133,57 +96,46 @@ body{background:var(--bg0);color:var(--text0);font-family:var(--font-b);min-heig
 .cta-row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
 .cta-btn{padding:10px 20px;border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-b);transition:all .2s}
 .cta-primary{background:linear-gradient(135deg,var(--accent),#4f46e5);color:white}
-.cta-primary:hover{transform:translateY(-1px)}
 .cta-ghost{background:var(--bg2);color:var(--text1);border:1px solid var(--border)}
-.cta-ghost:hover{border-color:var(--border2);color:var(--text0)}
 .badge{display:inline-flex;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
 .badge-green{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.25)}
 .badge-amber{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
 .badge-accent{background:rgba(99,112,255,.12);color:var(--accent2);border:1px solid rgba(99,112,255,.25)}
 .prog-bar-wrap{height:8px;background:var(--bg3);border-radius:99px;overflow:hidden;margin:10px 0}
 .prog-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width 1s ease}
-@media(max-width:650px){.stats-grid,.info-grid{grid-template-columns:1fr}.dash-wrap{padding:20px 12px}}
+@media(max-width:650px){.stats-grid,.info-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
-<div class="orb orb3"></div>
-<div id="root"></div>
+<div id="root"><div style="color:#6b7099;text-align:center;padding:60px;font-family:sans-serif">Loading CareerAI...</div></div>
 <script>
 const {useState,useEffect,useRef} = React;
-
-// ── API config ────────────────────────────────────────────────────────────────
 const API_BASE = 'https://careerai-platform.onrender.com/api/v1';
 
-async function apiCall(method, path, body=null, token=null) {
-  const headers = {'Content-Type':'application/json'};
-  if (token) headers['Authorization'] = `Bearer ${token}`;
-  const res  = await fetch(`${API_BASE}${path}`, {method, headers, body: body ? JSON.stringify(body) : null});
-  const data = await res.json();
+async function apiCall(method, path, body, token) {
+  var headers = {'Content-Type':'application/json'};
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  var res  = await fetch(API_BASE + path, {method:method, headers:headers, body: body ? JSON.stringify(body) : null});
+  var data = await res.json();
   if (!res.ok) throw new Error(data.message || 'Request failed');
   return data.data;
 }
 
-// ── Token storage ─────────────────────────────────────────────────────────────
-const Auth = {
-  save(access, refresh, user) {
-    localStorage.setItem('careerai_access',  access);
-    localStorage.setItem('careerai_refresh', refresh);
-    localStorage.setItem('careerai_user',    JSON.stringify(user));
-  },
-  getAccess()  { return localStorage.getItem('careerai_access'); },
-  getRefresh() { return localStorage.getItem('careerai_refresh'); },
-  getUser()    { try { return JSON.parse(localStorage.getItem('careerai_user')); } catch { return null; } },
-  clear()      { ['careerai_access','careerai_refresh','careerai_user'].forEach(k => localStorage.removeItem(k)); },
-  isLoggedIn() { return !!this.getAccess() && !!this.getUser(); },
+var Auth = {
+  save: function(a,r,u){ localStorage.setItem('ca_access',a); localStorage.setItem('ca_refresh',r); localStorage.setItem('ca_user',JSON.stringify(u)); },
+  getAccess:  function(){ return localStorage.getItem('ca_access'); },
+  getRefresh: function(){ return localStorage.getItem('ca_refresh'); },
+  getUser:    function(){ try{ return JSON.parse(localStorage.getItem('ca_user')); }catch(e){ return null; } },
+  clear:      function(){ localStorage.removeItem('ca_access'); localStorage.removeItem('ca_refresh'); localStorage.removeItem('ca_user'); },
+  isLoggedIn: function(){ return !!this.getAccess() && !!this.getUser(); }
 };
 
-// ── Password strength ─────────────────────────────────────────────────────────
 function getStrength(pw) {
   if (!pw) return {level:0,label:''};
-  let score = 0;
-  if (pw.length >= 8)  score++;
+  var score = 0;
+  if (pw.length >= 8) score++;
   if (pw.length >= 12) score++;
   if (/[A-Z]/.test(pw)) score++;
   if (/[0-9]/.test(pw)) score++;
@@ -193,51 +145,101 @@ function getStrength(pw) {
   return {level:3,label:'Strong'};
 }
 
-// ── Completion Ring ───────────────────────────────────────────────────────────
-function Ring({pct}) {
-  const r=28, circ=2*Math.PI*r;
-  const dash = circ * (1 - pct/100);
+function Ring(props) {
+  var pct = props.pct;
+  var r = 28, circ = 2 * Math.PI * r;
+  var dash = circ * (1 - pct/100);
   return React.createElement('div',{className:'completion-ring'},
     React.createElement('svg',{width:64,height:64,viewBox:'0 0 64 64'},
-      React.createElement('circle',{cx:32,cy:32,r,fill:'none',stroke:'var(--bg3)',strokeWidth:5}),
-      React.createElement('circle',{cx:32,cy:32,r,fill:'none',stroke:'url(#rg)',strokeWidth:5,
-        strokeDasharray:circ,strokeDashoffset:dash,strokeLinecap:'round',style:{transition:'stroke-dashoffset 1s ease'}}),
-      React.createElement('defs',null,
-        React.createElement('linearGradient',{id:'rg',x1:'0%',y1:'0%',x2:'100%',y2:'0%'},
-          React.createElement('stop',{offset:'0%',stopColor:'#6370ff'}),
-          React.createElement('stop',{offset:'100%',stopColor:'#22d3ee'})
-        )
-      )
+      React.createElement('circle',{cx:32,cy:32,r:r,fill:'none',stroke:'var(--bg3)',strokeWidth:5}),
+      React.createElement('circle',{cx:32,cy:32,r:r,fill:'none',stroke:'var(--accent)',strokeWidth:5,
+        strokeDasharray:circ,strokeDashoffset:dash,strokeLinecap:'round'})
     ),
-    React.createElement('div',{className:'pct'},`${pct}%`)
+    React.createElement('div',{className:'pct'},pct+'%')
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// REGISTER PAGE
-// ════════════════════════════════════════════════════════════════════════════
-function RegisterPage({onLogin, goToLogin}) {
-  const [form, setForm]       = useState({name:'',email:'',password:'',role:'student'});
-  const [agree, setAgree]     = useState(false);
-  const [showPw, setShowPw]   = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
-  const [success, setSuccess] = useState('');
+function LoginPage(props) {
+  var onLogin = props.onLogin, goToRegister = props.goToRegister;
+  var _s1 = useState({email:'',password:''}), form = _s1[0], setForm = _s1[1];
+  var _s2 = useState(false), showPw = _s2[0], setShowPw = _s2[1];
+  var _s3 = useState(false), loading = _s3[0], setLoading = _s3[1];
+  var _s4 = useState(''), error = _s4[0], setError = _s4[1];
+  var _s5 = useState(''), success = _s5[0], setSuccess = _s5[1];
 
-  const set = (k,v) => setForm(f => ({...f,[k]:v}));
-  const strength = getStrength(form.password);
+  function set(k,v){ setForm(function(f){ var n=Object.assign({},f); n[k]=v; return n; }); }
 
-  async function handleRegister(e) {
+  function handleLogin(e) {
     e.preventDefault();
-    if (!agree) { setError('Please accept the terms to continue.'); return; }
     setLoading(true); setError(''); setSuccess('');
-    try {
-      const data = await apiCall('POST','/auth/register', form);
+    apiCall('POST','/auth/login',form,null).then(function(data){
       Auth.save(data.access_token, data.refresh_token, data.user);
-      setSuccess(`Welcome, ${data.user.name.split(' ')[0]}! Redirecting...`);
-      setTimeout(() => onLogin(data.user), 1000);
-    } catch(e) { setError(e.message); }
-    finally { setLoading(false); }
+      setSuccess('Welcome back, ' + data.user.name.split(' ')[0] + '!');
+      setTimeout(function(){ onLogin(data.user); }, 800);
+    }).catch(function(e){ setError(e.message); }).finally(function(){ setLoading(false); });
+  }
+
+  return React.createElement('div',{className:'auth-wrap'},
+    React.createElement('div',{className:'auth-card'},
+      React.createElement('div',{className:'logo'},
+        React.createElement('div',{className:'logo-mark'},'CareerAI'),
+        React.createElement('div',{className:'logo-sub'},'Student Intelligence Platform')
+      ),
+      React.createElement('div',{className:'auth-title'},'Welcome back'),
+      React.createElement('div',{className:'auth-sub'},'Sign in to your account to continue.'),
+      error ? React.createElement('div',{className:'banner banner-error'},'⚠ '+error) : null,
+      success ? React.createElement('div',{className:'banner banner-success'},'✓ '+success) : null,
+      React.createElement('form',{onSubmit:handleLogin},
+        React.createElement('div',{className:'field'},
+          React.createElement('label',null,'Email Address'),
+          React.createElement('input',{className:'input',type:'email',placeholder:'you@example.com',
+            value:form.email,onChange:function(e){set('email',e.target.value)},required:true,autoFocus:true})
+        ),
+        React.createElement('div',{className:'field'},
+          React.createElement('label',null,'Password'),
+          React.createElement('div',{className:'input-wrap'},
+            React.createElement('input',{className:'input',type:showPw?'text':'password',placeholder:'Your password',
+              value:form.password,onChange:function(e){set('password',e.target.value)},required:true}),
+            React.createElement('span',{className:'input-icon',onClick:function(){setShowPw(function(s){return !s;})}},showPw?'🙈':'👁')
+          )
+        ),
+        React.createElement('button',{className:'btn btn-primary',type:'submit',disabled:loading},
+          loading ? React.createElement('span',{className:'spinner'}) : '⚡  Sign In'
+        )
+      ),
+      React.createElement('div',{className:'divider'},React.createElement('span',null,'or')),
+      React.createElement('button',{className:'btn-social',onClick:function(){set('email','demo@careerai.com');set('password','Demo@1234');}},
+        '🔑  Try with demo account'
+      ),
+      React.createElement('div',{className:'switch-text'},
+        "Don't have an account? ",
+        React.createElement('a',{href:'#',onClick:function(e){e.preventDefault();goToRegister();}},'Sign up free')
+      )
+    )
+  );
+}
+
+function RegisterPage(props) {
+  var onLogin = props.onLogin, goToLogin = props.goToLogin;
+  var _s1 = useState({name:'',email:'',password:'',role:'student'}), form = _s1[0], setForm = _s1[1];
+  var _s2 = useState(false), agree = _s2[0], setAgree = _s2[1];
+  var _s3 = useState(false), showPw = _s3[0], setShowPw = _s3[1];
+  var _s4 = useState(false), loading = _s4[0], setLoading = _s4[1];
+  var _s5 = useState(''), error = _s5[0], setError = _s5[1];
+  var _s6 = useState(''), success = _s6[0], setSuccess = _s6[1];
+
+  function set(k,v){ setForm(function(f){ var n=Object.assign({},f); n[k]=v; return n; }); }
+  var strength = getStrength(form.password);
+
+  function handleRegister(e) {
+    e.preventDefault();
+    if (!agree){ setError('Please accept the terms to continue.'); return; }
+    setLoading(true); setError(''); setSuccess('');
+    apiCall('POST','/auth/register',form,null).then(function(data){
+      Auth.save(data.access_token, data.refresh_token, data.user);
+      setSuccess('Welcome, ' + data.user.name.split(' ')[0] + '! Redirecting...');
+      setTimeout(function(){ onLogin(data.user); }, 1000);
+    }).catch(function(e){ setError(e.message); }).finally(function(){ setLoading(false); });
   }
 
   return React.createElement('div',{className:'auth-wrap'},
@@ -248,358 +250,170 @@ function RegisterPage({onLogin, goToLogin}) {
       ),
       React.createElement('div',{className:'auth-title'},'Create your account'),
       React.createElement('div',{className:'auth-sub'},'Start your AI-powered career journey today.'),
-
-      // Role selector
       React.createElement('div',{className:'role-row'},
-        [['student','🎓','Student','Find your career path'],
-         ['counselor','👨‍💼','Counselor','Guide students']].map(([role,icon,label,desc]) =>
-          React.createElement('div',{key:role,className:`role-btn ${form.role===role?'active':''}`,onClick:()=>set('role',role)},
-            React.createElement('span',{className:'role-icon'},icon),
-            React.createElement('div',{className:'role-label'},label),
-            React.createElement('div',{className:'role-desc'},desc)
-          )
-        )
+        [['student','🎓','Student','Find your career path'],['counselor','👨‍💼','Counselor','Guide students']].map(function(r){
+          return React.createElement('div',{key:r[0],className:'role-btn'+(form.role===r[0]?' active':''),onClick:function(){set('role',r[0]);}},
+            React.createElement('span',{className:'role-icon'},r[1]),
+            React.createElement('div',{className:'role-label'},r[2]),
+            React.createElement('div',{className:'role-desc'},r[3])
+          );
+        })
       ),
-
-      error   && React.createElement('div',{className:'banner banner-error'},'⚠ ',error),
-      success && React.createElement('div',{className:'banner banner-success'},'✓ ',success),
-
+      error ? React.createElement('div',{className:'banner banner-error'},'⚠ '+error) : null,
+      success ? React.createElement('div',{className:'banner banner-success'},'✓ '+success) : null,
       React.createElement('form',{onSubmit:handleRegister},
         React.createElement('div',{className:'field'},
           React.createElement('label',null,'Full Name'),
           React.createElement('input',{className:'input',type:'text',placeholder:'e.g. Arjun Sharma',
-            value:form.name, onChange:e=>set('name',e.target.value), required})
+            value:form.name,onChange:function(e){set('name',e.target.value)},required:true})
         ),
         React.createElement('div',{className:'field'},
           React.createElement('label',null,'Email Address'),
           React.createElement('input',{className:'input',type:'email',placeholder:'you@example.com',
-            value:form.email, onChange:e=>set('email',e.target.value), required})
+            value:form.email,onChange:function(e){set('email',e.target.value)},required:true})
         ),
         React.createElement('div',{className:'field'},
           React.createElement('label',null,'Password'),
           React.createElement('div',{className:'input-wrap'},
             React.createElement('input',{className:'input',type:showPw?'text':'password',
               placeholder:'Min 8 chars, 1 uppercase, 1 number',
-              value:form.password, onChange:e=>set('password',e.target.value), required}),
-            React.createElement('span',{className:'input-icon',onClick:()=>setShowPw(s=>!s)},
-              showPw ? '🙈' : '👁')
+              value:form.password,onChange:function(e){set('password',e.target.value)},required:true}),
+            React.createElement('span',{className:'input-icon',onClick:function(){setShowPw(function(s){return !s;})}},showPw?'🙈':'👁')
           ),
-          form.password && React.createElement('div',null,
+          form.password ? React.createElement('div',null,
             React.createElement('div',{className:'strength-bar'},
-              [1,2,3].map(i => React.createElement('div',{key:i,className:`strength-seg ${
-                i<=strength.level ? (strength.level===1?'weak':strength.level===2?'fair':'strong') : ''
-              }`}))
+              [1,2,3].map(function(i){
+                return React.createElement('div',{key:i,className:'strength-seg'+(i<=strength.level?' '+(strength.level===1?'weak':strength.level===2?'fair':'strong'):'')});
+              })
             ),
-            React.createElement('div',{className:'strength-label'},
-              strength.label ? `Password strength: ${strength.label}` : '')
-          )
+            strength.label ? React.createElement('div',{className:'strength-label'},'Password strength: '+strength.label) : null
+          ) : null
         ),
         React.createElement('div',{className:'check-row'},
-          React.createElement('input',{type:'checkbox',id:'terms',checked:agree,onChange:e=>setAgree(e.target.checked)}),
-          React.createElement('label',{htmlFor:'terms'},
-            'I agree to the ', React.createElement('a',{href:'#'},'Terms of Service'),
-            ' and ', React.createElement('a',{href:'#'},'Privacy Policy')
-          )
+          React.createElement('input',{type:'checkbox',id:'terms',checked:agree,onChange:function(e){setAgree(e.target.checked)}}),
+          React.createElement('label',{htmlFor:'terms'},'I agree to the Terms of Service and Privacy Policy')
         ),
         React.createElement('button',{className:'btn btn-primary',type:'submit',disabled:loading},
           loading ? React.createElement('span',{className:'spinner'}) : '🚀  Create Account'
         )
       ),
-
       React.createElement('div',{className:'switch-text'},
-        'Already have an account? ', React.createElement('a',{href:'#',onClick:e=>{e.preventDefault();goToLogin()}},'Sign in')
+        'Already have an account? ',
+        React.createElement('a',{href:'#',onClick:function(e){e.preventDefault();goToLogin();}},'Sign in')
       )
     )
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// LOGIN PAGE
-// ════════════════════════════════════════════════════════════════════════════
-function LoginPage({onLogin, goToRegister}) {
-  const [form, setForm]       = useState({email:'', password:''});
-  const [showPw, setShowPw]   = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
-  const [success, setSuccess] = useState('');
+function DashboardPage(props) {
+  var user = props.user, onLogout = props.onLogout;
+  var _s1 = useState(null), dash = _s1[0], setDash = _s1[1];
+  var _s2 = useState(true), loading = _s2[0], setLoading = _s2[1];
+  var _s3 = useState(0), width = _s3[0], setWidth = _s3[1];
 
-  const set = (k,v) => setForm(f=>({...f,[k]:v}));
+  useEffect(function(){
+    apiCall('GET','/auth/dashboard',null,Auth.getAccess())
+      .then(function(d){ setDash(d); setLoading(false); setTimeout(function(){setWidth(d.profile_completion||0);},200); })
+      .catch(function(){ setLoading(false); });
+  },[]);
 
-  async function handleLogin(e) {
-    e.preventDefault();
-    setLoading(true); setError(''); setSuccess('');
-    try {
-      const data = await apiCall('POST','/auth/login', form);
-      Auth.save(data.access_token, data.refresh_token, data.user);
-      setSuccess(`Welcome back, ${data.user.name.split(' ')[0]}!`);
-      setTimeout(() => onLogin(data.user, data.profile_completion), 800);
-    } catch(e) { setError(e.message); }
-    finally { setLoading(false); }
+  function handleLogout(){
+    apiCall('POST','/auth/logout',{refresh_token:Auth.getRefresh()},null).catch(function(){});
+    Auth.clear(); onLogout();
   }
 
-  // Demo login fill
-  function fillDemo() { setForm({email:'demo@careerai.com', password:'Demo@1234'}); }
-
-  return React.createElement('div',{className:'auth-wrap'},
-    React.createElement('div',{className:'auth-card'},
-      React.createElement('div',{className:'logo'},
-        React.createElement('div',{className:'logo-mark'},'CareerAI'),
-        React.createElement('div',{className:'logo-sub'},'Student Intelligence Platform')
-      ),
-      React.createElement('div',{className:'auth-title'},'Welcome back'),
-      React.createElement('div',{className:'auth-sub'},'Sign in to your account to continue.'),
-
-      error   && React.createElement('div',{className:'banner banner-error'},'⚠ ',error),
-      success && React.createElement('div',{className:'banner banner-success'},'✓ ',success),
-
-      React.createElement('form',{onSubmit:handleLogin},
-        React.createElement('div',{className:'field'},
-          React.createElement('label',null,'Email Address'),
-          React.createElement('input',{className:'input',type:'email',placeholder:'you@example.com',
-            value:form.email, onChange:e=>set('email',e.target.value), required, autoFocus:true})
-        ),
-        React.createElement('div',{className:'field'},
-          React.createElement('label',null,'Password'),
-          React.createElement('div',{className:'input-wrap'},
-            React.createElement('input',{className:'input',type:showPw?'text':'password',placeholder:'Your password',
-              value:form.password, onChange:e=>set('password',e.target.value), required}),
-            React.createElement('span',{className:'input-icon',onClick:()=>setShowPw(s=>!s)},
-              showPw ? '🙈' : '👁')
-          )
-        ),
-        React.createElement('button',{className:'btn btn-primary',type:'submit',disabled:loading},
-          loading ? React.createElement('span',{className:'spinner'}) : '⚡  Sign In'
-        )
-      ),
-
-      React.createElement('div',{className:'divider'},React.createElement('span',null,'or')),
-      React.createElement('button',{className:'btn-social',onClick:fillDemo},
-        '🔑  Try with demo account'
-      ),
-
-      React.createElement('div',{className:'switch-text'},
-        "Don't have an account? ", React.createElement('a',{href:'#',onClick:e=>{e.preventDefault();goToRegister()}},'Sign up free')
-      )
-    )
-  );
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// DASHBOARD PAGE (after login)
-// ════════════════════════════════════════════════════════════════════════════
-function DashboardPage({user, onLogout}) {
-  const [dash, setDash]   = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    apiCall('GET','/auth/dashboard', null, Auth.getAccess())
-      .then(d => { setDash(d); setLoading(false); setTimeout(()=>setWidth(d.profile_completion), 200); })
-      .catch(() => setLoading(false));
-  }, []);
-
-  function handleLogout() {
-    const refresh = Auth.getRefresh();
-    apiCall('POST','/auth/logout',{refresh_token:refresh}).catch(()=>{});
-    Auth.clear();
-    onLogout();
-  }
-
-  const firstName = user?.name?.split(' ')[0] || 'Student';
-
+  var firstName = (user && user.name) ? user.name.split(' ')[0] : 'Student';
   if (loading) return React.createElement('div',{style:{color:'var(--text2)',textAlign:'center',padding:40}},
-    React.createElement('div',{style:{width:32,height:32,border:'3px solid var(--border2)',borderTopColor:'var(--accent)',borderRadius:'50%',animation:'spin .7s linear infinite',margin:'0 auto 12px'}}),
-    React.createElement('p',null,'Loading your dashboard...')
-  );
+    React.createElement('p',null,'Loading your dashboard...'));
 
-  const pred = dash?.latest_prediction;
-  const profile = dash?.profile || {};
-  const completion = dash?.profile_completion || 0;
+  var pred = dash && dash.latest_prediction;
+  var profile = (dash && dash.profile) || {};
+  var completion = (dash && dash.profile_completion) || 0;
 
   return React.createElement('div',{className:'dash-wrap'},
-    // Header
     React.createElement('div',{className:'dash-header'},
       React.createElement('div',null,
-        React.createElement('div',{className:'dash-greeting'},
-          'Hey, ', React.createElement('span',null,firstName),' 👋'
-        ),
+        React.createElement('div',{className:'dash-greeting'},'Hey, ',React.createElement('span',null,firstName),' 👋'),
         React.createElement('div',{style:{fontSize:14,color:'var(--text2)',marginTop:4}},
-          `${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})}`
-        )
+          new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'}))
       ),
       React.createElement('div',{style:{display:'flex',alignItems:'center',gap:12}},
-        React.createElement('div',{style:{textAlign:'right'}},
-          React.createElement('div',{style:{fontSize:13,fontWeight:600,color:'var(--text0)'}},user?.name),
-          React.createElement('div',{style:{fontSize:11,color:'var(--text2)',textTransform:'uppercase',letterSpacing:'.5px'}},user?.role)
-        ),
-        React.createElement('div',{style:{width:40,height:40,borderRadius:'50%',background:'linear-gradient(135deg,var(--accent),var(--cyan))',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:15}},
-          user?.avatar_initials || firstName[0]
+        React.createElement('div',{style:{width:36,height:36,borderRadius:'50%',background:'linear-gradient(135deg,var(--accent),var(--cyan))',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14,color:'white'}},
+          (user && user.avatar_initials) ? user.avatar_initials : firstName[0]
         ),
         React.createElement('button',{className:'logout-btn',onClick:handleLogout},'Sign out')
       )
     ),
-
-    // Stats
     React.createElement('div',{className:'stats-grid'},
-      [
-        ['🎯', String(dash?.total_predictions || 0), 'Predictions Made'],
-        ['📊', `${completion}%`, 'Profile Complete'],
-        ['🎓', pred ? pred.career_1 : 'Not yet', 'Top Career Match'],
-      ].map(([icon,num,label]) =>
-        React.createElement('div',{className:'stat-card',key:label},
-          React.createElement('div',{style:{fontSize:24,marginBottom:8}},icon),
-          React.createElement('div',{className:'stat-num',style:{fontSize:22}},num),
-          React.createElement('div',{className:'stat-label'},label)
-        )
-      )
+      [['🎯',String((dash&&dash.total_predictions)||0),'Predictions'],
+       ['📊',completion+'%','Profile Complete'],
+       ['🎓',pred?pred.career_1:'Not yet','Top Match']
+      ].map(function(item){
+        return React.createElement('div',{className:'stat-card',key:item[2]},
+          React.createElement('div',{style:{fontSize:24,marginBottom:8}},item[0]),
+          React.createElement('div',{className:'stat-num',style:{fontSize:20}},item[1]),
+          React.createElement('div',{className:'stat-label'},item[2])
+        );
+      })
     ),
-
     React.createElement('div',{className:'info-grid'},
-      // Left — latest prediction + profile completion
-      React.createElement('div',null,
-        // Profile completion card
-        React.createElement('div',{className:'info-card',style:{marginBottom:16}},
-          React.createElement('div',{className:'card-title'},'Profile Completion'),
-          React.createElement('div',{style:{display:'flex',alignItems:'center',gap:20}},
-            React.createElement(Ring,{pct:completion}),
-            React.createElement('div',{style:{flex:1}},
-              React.createElement('div',{style:{fontSize:14,color:'var(--text1)',marginBottom:8}},
-                completion < 50 ? '📝 Complete your profile to get accurate predictions.' :
-                completion < 100 ? '🔥 Almost there! A few more fields to go.' :
-                '✅ Profile complete! Your predictions are fully personalized.'
-              ),
-              React.createElement('div',{className:'prog-bar-wrap'},
-                React.createElement('div',{className:'prog-bar',style:{width:`${width}%`}})
-              )
+      React.createElement('div',{className:'info-card'},
+        React.createElement('div',{className:'card-title'},'Profile Completion'),
+        React.createElement('div',{style:{display:'flex',alignItems:'center',gap:20}},
+          React.createElement(Ring,{pct:completion}),
+          React.createElement('div',{style:{flex:1}},
+            React.createElement('div',{style:{fontSize:14,color:'var(--text1)',marginBottom:8}},
+              completion < 50 ? '📝 Complete your profile for accurate predictions.' :
+              completion < 100 ? '🔥 Almost there!' : '✅ Profile complete!'
+            ),
+            React.createElement('div',{className:'prog-bar-wrap'},
+              React.createElement('div',{className:'prog-bar',style:{width:width+'%'}})
             )
-          ),
-          React.createElement('div',{className:'cta-row'},
-            React.createElement('button',{className:'cta-btn cta-primary',
-              onClick:()=>window.open('https://splendorous-meerkat-321335.netlify.app','_blank')
-            },'⚡ Predict My Career'),
-            React.createElement('button',{className:'cta-btn cta-ghost',
-              onClick:()=>window.open('https://splendorous-meerkat-321335.netlify.app','_blank')
-            },'✏️ Update Profile')
           )
         ),
-
-        // Latest prediction
-        pred && React.createElement('div',{className:'info-card'},
-          React.createElement('div',{className:'card-title'},'Latest Career Prediction'),
-          [
-            [pred.career_1, pred.prob_1],
-            [pred.career_2, pred.prob_2],
-            [pred.career_3, pred.prob_3],
-          ].filter(([c])=>c).map(([career, prob], i) =>
-            React.createElement('div',{className:'pred-card',key:i},
-              React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}},
-                React.createElement('div',{className:'pred-career'},career),
-                React.createElement('span',{className:`badge ${i===0?'badge-accent':'badge-amber'}`},i===0?'Top Match':'Match')
-              ),
-              React.createElement('div',{className:'pred-bar'},
-                React.createElement('div',{className:'pred-fill',style:{width:`${prob}%`}})
-              ),
-              React.createElement('div',{className:'pred-pct'},`${prob?.toFixed(1)}% match`)
-            )
-          ),
-          React.createElement('div',{style:{fontSize:12,color:'var(--text2)',marginTop:8}},
-            `Predicted on ${new Date(pred.created_at).toLocaleDateString('en-IN')}`
-          )
-        ),
-
-        !pred && React.createElement('div',{className:'info-card'},
-          React.createElement('div',{className:'card-title'},'Career Prediction'),
-          React.createElement('div',{style:{textAlign:'center',padding:'24px 0',color:'var(--text2)'}},
-            React.createElement('div',{style:{fontSize:40,marginBottom:12}},'🔮'),
-            React.createElement('div',{style:{fontSize:15,color:'var(--text1)',marginBottom:16}},'No predictions yet'),
-            React.createElement('button',{className:'cta-btn cta-primary',
-              onClick:()=>window.open('https://splendorous-meerkat-321335.netlify.app','_blank')
-            },'⚡ Get My Prediction')
-          )
+        React.createElement('div',{className:'cta-row'},
+          React.createElement('button',{className:'cta-btn cta-primary',onClick:function(){window.open('https://kareerai1.netlify.app','_blank');}},
+            '⚡ Predict My Career'),
+          React.createElement('button',{className:'cta-btn cta-ghost',onClick:function(){window.open('https://kareerai1.netlify.app','_blank');}},
+            '✏️ Update Profile')
         )
       ),
-
-      // Right — profile summary
       React.createElement('div',{className:'info-card'},
         React.createElement('div',{className:'card-title'},'Your Profile'),
-        React.createElement('div',null,
-          [
-            ['Education', profile.education_level || profile.degree],
-            ['Region',    profile.region],
-            ['GPA',       profile.gpa ? `${profile.gpa} / 4.0` : null],
-            ['Aptitude',  profile.aptitude_score ? `${profile.aptitude_score} / 100` : null],
-            ['Category',  profile.category],
-            ['Income',    profile.income_category],
-          ].map(([key, val]) =>
-            React.createElement('div',{className:'profile-item',key:key},
-              React.createElement('span',{className:'profile-key'},key),
-              val
-                ? React.createElement('span',{className:'profile-val'},val)
-                : React.createElement('span',{style:{color:'var(--text2)',fontSize:12}},'Not set')
-            )
-          )
-        ),
-        React.createElement('div',{style:{marginTop:16}},
-          React.createElement('div',{className:'card-title'},'Quick Links'),
-          React.createElement('div',{className:'cta-row',style:{flexDirection:'column',gap:8}},
-            [
-              ['🎓','Find Scholarships','scholarships'],
-              ['📚','Learning Roadmap', 'learning'],
-              ['🗺️','Career Insights',  'insights'],
-            ].map(([icon,label,page]) =>
-              React.createElement('button',{key:label,className:'cta-btn cta-ghost',style:{width:'100%',textAlign:'left'},
-                onClick:()=>window.open(`https://splendorous-meerkat-321335.netlify.app#${page}`,'_blank')
-              },`${icon}  ${label}`)
-            )
-          )
-        )
+        [['Education',profile.education_level||profile.degree],
+         ['Region',profile.region],
+         ['GPA',profile.gpa?profile.gpa+' / 4.0':null],
+         ['Aptitude',profile.aptitude_score?profile.aptitude_score+' / 100':null],
+         ['Category',profile.category]
+        ].map(function(item){
+          return React.createElement('div',{className:'profile-item',key:item[0]},
+            React.createElement('span',{className:'profile-key'},item[0]),
+            item[1] ? React.createElement('span',{className:'profile-val'},item[1])
+                    : React.createElement('span',{style:{color:'var(--text2)',fontSize:12}},'Not set')
+          );
+        })
       )
     )
   );
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// ROOT APP
-// ════════════════════════════════════════════════════════════════════════════
 function App() {
-  const [page, setPage]   = useState('login');   // login | register | dashboard
-  const [user, setUser]   = useState(null);
+  var _s1 = useState('login'), page = _s1[0], setPage = _s1[1];
+  var _s2 = useState(null), user = _s2[0], setUser = _s2[1];
 
-  // Auto-login if token exists
-  useEffect(() => {
-    if (Auth.isLoggedIn()) {
-      setUser(Auth.getUser());
-      setPage('dashboard');
-    }
-  }, []);
+  useEffect(function(){
+    if (Auth.isLoggedIn()){ setUser(Auth.getUser()); setPage('dashboard'); }
+  },[]);
 
-  function handleLogin(userData) {
-    setUser(userData);
-    setPage('dashboard');
-  }
+  function handleLogin(u){ setUser(u); setPage('dashboard'); }
+  function handleLogout(){ setUser(null); setPage('login'); }
 
-  function handleLogout() {
-    setUser(null);
-    setPage('login');
-  }
-
-  if (page === 'dashboard' && user) {
-    return React.createElement(DashboardPage, {user, onLogout: handleLogout});
-  }
-  if (page === 'register') {
-    return React.createElement(RegisterPage, {onLogin: handleLogin, goToLogin: ()=>setPage('login')});
-  }
-  return React.createElement(LoginPage, {onLogin: handleLogin, goToRegister: ()=>setPage('register')});
+  if (page==='dashboard' && user) return React.createElement(DashboardPage,{user:user,onLogout:handleLogout});
+  if (page==='register') return React.createElement(RegisterPage,{onLogin:handleLogin,goToLogin:function(){setPage('login');}});
+  return React.createElement(LoginPage,{onLogin:handleLogin,goToRegister:function(){setPage('register');}});
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-  try {
-    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
-  } catch(e) {
-    document.getElementById('root').innerHTML = '<div style="color:white;padding:40px;font-family:sans-serif">Error: ' + e.message + '</div>';
-    console.error(e);
-  }
-});
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
 </script>
 </body>
 </html>
