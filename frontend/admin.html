@@ -4,144 +4,737 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>CareerAI — Admin Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-/* See full styles in admin_dashboard/frontend/admin.html */
-:root{--bg0:#05060e;--bg1:#0a0c18;--bg2:#0f1224;--bg3:#151830;--accent:#6370ff;--cyan:#22d3ee;--green:#34d399;--amber:#fbbf24;--red:#f87171;--text0:#eef0ff;--text1:#b0b4d8;--text2:#5e6388;--border:rgba(99,112,255,.14);--border2:rgba(99,112,255,.28);--font-d:'Syne',sans-serif;--font-b:'DM Sans',sans-serif;--r:12px;--r-sm:8px;--r-xs:6px;--sidebar:220px;}
-*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}
-body{background:var(--bg0);color:var(--text0);font-family:var(--font-b);font-size:14px;display:flex}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:99px}
-.sidebar{width:var(--sidebar);height:100vh;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:fixed;left:0;top:0;z-index:50}
-.sidebar-top{padding:20px 16px 12px}
+:root{
+  --bg0:#07080f;--bg1:#0d0f1c;--bg2:#12152b;--bg3:#181c36;--bg4:#1e2340;
+  --border:rgba(99,112,255,.15);--border2:rgba(99,112,255,.3);
+  --accent:#6370ff;--accent2:#a78bfa;--cyan:#22d3ee;--green:#34d399;
+  --amber:#fbbf24;--red:#f87171;--orange:#fb923c;
+  --text0:#f0f2ff;--text1:#b8bcde;--text2:#6b7099;--text3:#3d4270;
+  --font-d:'Syne',sans-serif;--font-b:'DM Sans',sans-serif;
+  --r:14px;--r-sm:8px;--r-xs:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--text0);font-family:var(--font-b);font-size:14px;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:99px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Layout */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;min-height:100vh;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100}
+.sidebar-logo{padding:24px 20px 18px;border-bottom:1px solid var(--border)}
 .logo-mark{font-family:var(--font-d);font-size:17px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.logo-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.25);border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:middle}
-.sidebar-nav{flex:1;padding:8px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
-.nav-section{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;padding:12px 8px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r-sm);color:var(--text2);cursor:pointer;transition:all .18s;font-size:13px;font-weight:500;border:1px solid transparent}
-.nav-item:hover{background:var(--bg2);color:var(--text0)}.nav-item.active{background:linear-gradient(135deg,rgba(99,112,255,.16),rgba(34,211,238,.06));color:var(--text0);border-color:var(--border)}
-.nav-icon{font-size:15px;width:20px;text-align:center}
-.sidebar-footer{padding:12px 14px;border-top:1px solid var(--border)}
-.admin-pill{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--border)}
-.admin-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--red),#fb923c);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
-.admin-name{font-size:12px;font-weight:600;color:var(--text0)}.admin-role{font-size:10px;color:var(--red);font-weight:600}
-.main{margin-left:var(--sidebar);flex:1;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:40;background:rgba(5,6,14,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.topbar-title{font-family:var(--font-d);font-size:16px;font-weight:700}.topbar-right{display:flex;align-items:center;gap:12px}
+.logo-sub{font-size:9px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.admin-badge{display:inline-block;background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.25);border-radius:4px;font-size:9px;font-weight:700;padding:1px 6px;margin-top:4px}
+.sidebar-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:2px}
+.nav-section{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 10px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-sm);color:var(--text2);cursor:pointer;transition:all .2s;font-size:13px;font-weight:500;border:1px solid transparent}
+.nav-item:hover{background:var(--bg2);color:var(--text0)}
+.nav-item.active{background:linear-gradient(135deg,rgba(99,112,255,.18),rgba(34,211,238,.06));color:var(--text0);border-color:var(--border)}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border)}
+.admin-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--border)}
+.admin-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
+.admin-name{font-size:12px;font-weight:600;color:var(--text0)}
+.admin-role{font-size:10px;color:var(--red)}
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--bg1);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--text0)}
+.topbar-right{display:flex;align-items:center;gap:12px}
 .topbar-time{font-size:12px;color:var(--text2)}
-.logout-btn{font-size:12px;font-weight:600;color:var(--text2);background:none;border:1px solid var(--border);border-radius:var(--r-xs);padding:5px 12px;cursor:pointer;font-family:var(--font-b);transition:all .2s}
-.logout-btn:hover{color:var(--red);border-color:rgba(248,113,113,.4)}
-.content{padding:24px 28px;flex:1}
-.page{animation:fadeUp .3s ease}@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.btn-logout{padding:6px 14px;border-radius:var(--r-xs);border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;font-size:12px;font-family:var(--font-b);transition:all .2s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+.content{padding:28px 32px;flex:1}
+.page{animation:fadeUp .35s ease}
+
+/* Cards */
 .card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:20px}
 .card-title{font-family:var(--font-d);font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;transition:border-color .2s}
-.stat-card:hover{border-color:var(--border2)}.stat-icon{font-size:22px;margin-bottom:10px}
-.stat-num{font-family:var(--font-d);font-size:26px;font-weight:800;color:var(--text0);line-height:1}
-.stat-label{font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
-.stat-delta{font-size:11px;margin-top:6px;font-weight:600}.stat-delta.up{color:var(--green)}.stat-delta.neutral{color:var(--text2)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.grid-70-30{display:grid;grid-template-columns:1.8fr 1fr;gap:16px}.mt16{margin-top:16px}
-.table-wrap{overflow-x:auto;border-radius:var(--r-sm);border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse}thead tr{background:var(--bg2)}
-thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
-tbody tr{border-top:1px solid var(--border);transition:background .15s}tbody tr:hover{background:var(--bg2)}
-tbody td{padding:10px 14px;font-size:13px;color:var(--text1)}tbody td.bold{color:var(--text0);font-weight:500}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.3px}
-.badge-green{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.2)}
-.badge-red{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
-.badge-amber{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
-.badge-accent{background:rgba(99,112,255,.12);color:#a78bfa;border:1px solid rgba(99,112,255,.2)}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--r) var(--r) 0 0}
+.kpi-card.blue::before{background:linear-gradient(90deg,var(--accent),var(--cyan))}
+.kpi-card.green::before{background:linear-gradient(90deg,var(--green),#10b981)}
+.kpi-card.amber::before{background:linear-gradient(90deg,var(--amber),var(--orange))}
+.kpi-card.pink::before{background:linear-gradient(90deg,#f472b6,var(--accent2))}
+.kpi-icon{font-size:22px;margin-bottom:10px}
+.kpi-num{font-family:var(--font-d);font-size:28px;font-weight:800;color:var(--text0);line-height:1}
+.kpi-label{font-size:12px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
+.kpi-delta{font-size:11px;margin-top:8px;font-weight:600;color:var(--green)}
+
+/* Chart grids */
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.chart-row-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-wrap{position:relative;width:100%}
+canvas{display:block;width:100%!important}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--border);background:var(--bg2);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text1);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(99,112,255,.04)}
+.user-cell{display:flex;align-items:center;gap:10px}
+.u-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--cyan))}
+.u-name{font-weight:600;color:var(--text0);font-size:13px}
+.u-email{font-size:11px;color:var(--text2)}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge-green{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.badge-red{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+.badge-amber{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
+.badge-accent{background:rgba(99,112,255,.12);color:var(--accent2);border:1px solid rgba(99,112,255,.2)}
 .badge-cyan{background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.2)}
-.badge-gray{background:rgba(107,112,153,.1);color:var(--text1);border:1px solid var(--border)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r-xs);font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-b);transition:all .18s}
-.btn-primary{background:linear-gradient(135deg,var(--accent),#4f46e5);color:white}.btn-primary:hover{opacity:.9}
-.btn-ghost{background:var(--bg2);color:var(--text1);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--border2);color:var(--text0)}
-.btn-danger{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.2)}.btn-sm{padding:5px 10px;font-size:11px}
-.input{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-xs);color:var(--text0);font-family:var(--font-b);font-size:13px;padding:8px 12px;outline:none;transition:border-color .2s}
-.input:focus{border-color:var(--accent)}.input::placeholder{color:var(--text2)}select.input option{background:var(--bg1)}
-.search-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.chart-box{position:relative}canvas{display:block;width:100%!important}
-.prog-wrap{height:5px;background:var(--bg3);border-radius:99px;overflow:hidden}
-.prog-bar{height:100%;border-radius:99px;transition:width .8s ease}.prog-accent{background:linear-gradient(90deg,var(--accent),var(--cyan))}
-.career-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.career-name{font-size:12px;color:var(--text1);width:160px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.career-bar-wrap{flex:1;height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
-.career-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--cyan))}
-.career-count{font-size:11px;color:#a78bfa;font-weight:600;width:28px;text-align:right}
-.log-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.log-row:last-child{border-bottom:none}.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.log-dot.reg{background:var(--green)}.log-dot.pred{background:var(--accent)}
-.log-text{flex:1;font-size:12px;color:var(--text1);line-height:1.5}.log-time{font-size:11px;color:var(--text2);flex-shrink:0}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.modal{background:var(--bg1);border:1px solid var(--border2);border-radius:var(--r);padding:28px;width:520px;max-width:95vw;max-height:85vh;overflow-y:auto;animation:fadeUp .2s ease}
-.modal-title{font-family:var(--font-d);font-size:18px;font-weight:700;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
-.modal-close{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:0 4px;line-height:1}.modal-close:hover{color:var(--text0)}
-.field-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px}
-.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-page{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;gap:14px;color:var(--text2)}
-.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:12px;color:var(--text2)}
-.page-btns{display:flex;gap:4px}.page-btn{padding:5px 10px;border-radius:var(--r-xs);border:1px solid var(--border);background:var(--bg2);color:var(--text1);cursor:pointer;font-size:12px;font-family:var(--font-b)}
-.page-btn:hover{border-color:var(--border2);color:var(--text0)}.page-btn.active{background:var(--accent);color:white;border-color:var(--accent)}.page-btn:disabled{opacity:.4;cursor:not-allowed}
+.badge-gray{background:rgba(107,112,153,.12);color:var(--text2);border:1px solid rgba(107,112,153,.2)}
+
+/* Action buttons */
+.action-row{display:flex;gap:6px;flex-wrap:wrap}
+.btn-action{padding:4px 10px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-b);transition:all .2s}
+.btn-view{background:rgba(99,112,255,.12);color:var(--accent2)}
+.btn-view:hover{background:rgba(99,112,255,.25)}
+.btn-disable{background:rgba(248,113,113,.12);color:var(--red)}
+.btn-disable:hover{background:rgba(248,113,113,.25)}
+.btn-enable{background:rgba(52,211,153,.12);color:var(--green)}
+.btn-enable:hover{background:rgba(52,211,153,.25)}
+.btn-role{background:rgba(251,191,36,.1);color:var(--amber)}
+.btn-role:hover{background:rgba(251,191,36,.2)}
+
+/* Filter bar */
+.filter-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:200px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text0);font-family:var(--font-b);font-size:13px;padding:9px 14px;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text2)}
+.filter-select{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text1);font-family:var(--font-b);font-size:13px;padding:9px 12px;outline:none;cursor:pointer}
+.filter-select option{background:var(--bg1)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:28px;width:90%;max-width:520px;max-height:80vh;overflow-y:auto;animation:fadeUp .3s ease}
+.modal-title{font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--text0);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{cursor:pointer;color:var(--text2);font-size:22px;line-height:1;background:none;border:none;color:var(--text2)}
+.detail-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:var(--text2)}
+.detail-val{color:var(--text0);font-weight:500}
+
+/* Activity */
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.activity-dot.user{background:var(--accent)}
+.activity-dot.pred{background:var(--green)}
+.activity-text{font-size:13px;color:var(--text1)}
+.activity-time{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Mini progress */
+.mini-progress{height:4px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-top:4px}
+.mini-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--cyan))}
+
+/* Spinner */
+.spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+.loading-card{display:flex;align-items:center;justify-content:center;padding:48px;gap:12px;color:var(--text2)}
+
+/* Section header */
+.section-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.section-title{font-family:var(--font-d);font-size:22px;font-weight:800;color:var(--text0);letter-spacing:-.5px}
+.section-sub{font-size:13px;color:var(--text2);margin-top:3px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 16px;font-size:13px;color:var(--text0);z-index:300;animation:fadeUp .3s ease;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.toast.success{border-color:rgba(52,211,153,.4);color:var(--green)}
+.toast.error{border-color:rgba(248,113,113,.4);color:var(--red)}
+
+/* Login page */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-card{background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:420px;animation:fadeUp .4s ease}
+.login-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text0);font-family:var(--font-b);font-size:14px;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .2s}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;padding:13px;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--accent),#4f46e5);color:white;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font-b);margin-top:4px}
+.login-btn-demo{width:100%;padding:11px;border-radius:var(--r-sm);background:var(--bg2);color:var(--text1);border:1px solid var(--border);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-b);margin-top:10px}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chart-row,.chart-row-equal{grid-template-columns:1fr}
+  .content{padding:20px 16px}
+}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><div style="color:#6b7099;text-align:center;padding:60px;font-family:sans-serif">Loading Admin Dashboard...</div></div>
 <script>
-const {useState,useEffect,useRef}=React;
-const API_BASE='https://careerai-platform.onrender.com/api/v1';
-const getToken=()=>localStorage.getItem('careerai_access');
-const getUser=()=>{try{return JSON.parse(localStorage.getItem('careerai_user'));}catch{return null;}};
-async function api(method,path,body=null){
-  const h={'Content-Type':'application/json'};const t=getToken();if(t)h['Authorization']=`Bearer ${t}`;
-  const r=await fetch(`${API_BASE}${path}`,{method,headers:h,body:body?JSON.stringify(body):null});
-  const d=await r.json();if(!r.ok)throw new Error(d.message||'API error');return d.data;
+var useState = React.useState;
+var useEffect = React.useEffect;
+var useRef = React.useRef;
+var h = React.createElement;
+
+var API_BASE = 'https://careerai-platform.onrender.com/api/v1';
+
+var Auth = {
+  getAccess:  function(){ return localStorage.getItem('ca_access'); },
+  getRefresh: function(){ return localStorage.getItem('ca_refresh'); },
+  getUser:    function(){ try{ return JSON.parse(localStorage.getItem('ca_user')); }catch(e){ return null; } },
+  save: function(a,r,u){ localStorage.setItem('ca_access',a); localStorage.setItem('ca_refresh',r); localStorage.setItem('ca_user',JSON.stringify(u)); },
+  clear: function(){ localStorage.removeItem('ca_access'); localStorage.removeItem('ca_refresh'); localStorage.removeItem('ca_user'); }
+};
+
+function api(method, path, body) {
+  var token = Auth.getAccess();
+  var headers = {'Content-Type':'application/json'};
+  if (token) headers['Authorization'] = 'Bearer '+token;
+  return fetch(API_BASE+path, {method:method, headers:headers, body:body?JSON.stringify(body):null})
+    .then(function(res){ return res.json().then(function(d){ if(!res.ok) throw new Error(d.message||'Error'); return d.data; }); });
 }
-const fmt={num:n=>n?.toLocaleString('en-IN')??'—',date:d=>d?new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—',rel:d=>{if(!d)return'—';const s=(Date.now()-new Date(d))/1000;if(s<60)return'just now';if(s<3600)return`${Math.floor(s/60)}m ago`;if(s<86400)return`${Math.floor(s/3600)}h ago`;return`${Math.floor(s/86400)}d ago`;}};
 
-function LineChart({data,color='#6370ff'}){const ref=useRef();const cRef=useRef();useEffect(()=>{if(!ref.current||!data?.length)return;if(cRef.current)cRef.current.destroy();cRef.current=new Chart(ref.current,{type:'line',data:{labels:data.map(d=>d.date||d.month),datasets:[{data:data.map(d=>d.count),borderColor:color,backgroundColor:color+'18',borderWidth:2,pointRadius:3,pointBackgroundColor:color,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1c2040',titleColor:'#eef0ff',bodyColor:'#b0b4d8',borderColor:'rgba(99,112,255,.3)',borderWidth:1}},scales:{x:{grid:{color:'rgba(99,112,255,.06)'},ticks:{color:'#5e6388',font:{size:10}}},y:{grid:{color:'rgba(99,112,255,.06)'},ticks:{color:'#5e6388',font:{size:10},stepSize:1}}},animation:{duration:800}}});return()=>cRef.current?.destroy();},[data]);return React.createElement('div',{className:'chart-box',style:{height:140}},React.createElement('canvas',{ref}));}
+// ── Mock data ──────────────────────────────────────────────────────────────
+var MOCK = {
+  overview: {total_students:20,total_predictions:47,profiles_complete:12,new_today:3,new_this_week:9,active_this_week:14,avg_profile_completion:68},
+  registrations: (function(){var a=[];for(var i=0;i<30;i++){var d=new Date(Date.now()-((29-i)*86400000));a.push({date:d.toISOString().slice(0,10),count:Math.floor(Math.random()*8+1)});}return a;})(),
+  predictions: (function(){var a=[];for(var i=0;i<30;i++){var d=new Date(Date.now()-((29-i)*86400000));a.push({date:d.toISOString().slice(0,10),count:Math.floor(Math.random()*12+2)});}return a;})(),
+  careers: [
+    {career:'Machine Learning Engineer',count:18,pct:16.4},
+    {career:'Data Scientist',count:15,pct:13.6},
+    {career:'Software Engineer',count:14,pct:12.7},
+    {career:'Web Developer',count:11,pct:10.0},
+    {career:'AI Researcher',count:9,pct:8.2},
+    {career:'Cloud Architect',count:8,pct:7.3},
+    {career:'Product Manager',count:7,pct:6.4},
+    {career:'Cybersecurity Analyst',count:6,pct:5.5}
+  ],
+  regions:[{region:'Telangana',count:6},{region:'Maharashtra',count:5},{region:'Karnataka',count:4},{region:'Tamil Nadu',count:3},{region:'Delhi',count:2}],
+  degrees:[{degree:'B.Tech',count:9},{degree:'B.Sc',count:4},{degree:'MCA',count:3},{degree:'B.Com',count:2},{degree:'MBA',count:2}],
+  users:{
+    users:[
+      {id:1,name:'Arjun Sharma',email:'arjun@test.com',role:'student',is_active:1,avatar_initials:'AS',created_at:'2025-01-15',degree:'B.Tech',region:'Telangana',gpa:3.7,pred_count:3,profile_complete:1},
+      {id:2,name:'Priya Reddy',email:'priya@test.com',role:'student',is_active:1,avatar_initials:'PR',created_at:'2025-01-18',degree:'B.Com',region:'Maharashtra',gpa:3.3,pred_count:1,profile_complete:0},
+      {id:3,name:'Rahul Nair',email:'rahul@test.com',role:'student',is_active:1,avatar_initials:'RN',created_at:'2025-01-20',degree:'M.Tech',region:'Karnataka',gpa:3.9,pred_count:5,profile_complete:1},
+      {id:4,name:'Sneha Iyer',email:'sneha@test.com',role:'counselor',is_active:1,avatar_initials:'SI',created_at:'2025-01-22',degree:'MBA',region:'Tamil Nadu',gpa:null,pred_count:0,profile_complete:0},
+      {id:5,name:'Dev Patel',email:'dev@test.com',role:'student',is_active:0,avatar_initials:'DP',created_at:'2025-01-25',degree:'BCA',region:'Gujarat',gpa:2.8,pred_count:2,profile_complete:0}
+    ],
+    total:5,page:1,per_page:20,total_pages:1
+  },
+  activity:[
+    {type:'new_user',detail:'Arjun Sharma joined',ts:'2025-01-25 10:30'},
+    {type:'prediction',detail:'Data Scientist predicted',ts:'2025-01-25 10:45'},
+    {type:'new_user',detail:'Priya Reddy joined',ts:'2025-01-24 14:20'},
+    {type:'prediction',detail:'ML Engineer predicted',ts:'2025-01-24 15:10'},
+    {type:'new_user',detail:'Rahul Nair joined',ts:'2025-01-23 09:05'}
+  ],
+  content:{saved_scholarships:8,total_scholarships:15,total_careers:16,total_resources:40}
+};
 
-function DoughnutChart({data}){const ref=useRef();const cRef=useRef();const COLORS=['#6370ff','#22d3ee','#a78bfa','#34d399','#fbbf24','#f472b6','#fb923c','#f87171','#38bdf8','#4ade80'];useEffect(()=>{if(!ref.current||!data?.length)return;if(cRef.current)cRef.current.destroy();cRef.current=new Chart(ref.current,{type:'doughnut',data:{labels:data.map(d=>d.career||d.degree||d.region||d.category||d.bucket),datasets:[{data:data.map(d=>d.count),backgroundColor:COLORS,borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'right',labels:{color:'#b0b4d8',font:{size:11},padding:10,boxWidth:10}},tooltip:{backgroundColor:'#1c2040',titleColor:'#eef0ff',bodyColor:'#b0b4d8',borderColor:'rgba(99,112,255,.3)',borderWidth:1}},animation:{duration:900}}});return()=>cRef.current?.destroy();},[data]);return React.createElement('div',{className:'chart-box',style:{height:200}},React.createElement('canvas',{ref}));}
+// ── Chart helpers ──────────────────────────────────────────────────────────
+function LineChart(props) {
+  var data = props.data, label = props.label, color = props.color||'#6370ff';
+  var ref = useRef(); var cRef = useRef();
+  useEffect(function(){
+    if(!ref.current||!data||!data.length) return;
+    if(cRef.current) cRef.current.destroy();
+    cRef.current = new Chart(ref.current,{
+      type:'line',
+      data:{labels:data.map(function(d){return d.date.slice(5);}),
+        datasets:[{label:label,data:data.map(function(d){return d.count;}),
+          borderColor:color,backgroundColor:color+'18',fill:true,tension:.4,pointRadius:2,borderWidth:2}]},
+      options:{responsive:true,plugins:{legend:{display:false},
+        tooltip:{backgroundColor:'#1e2340',titleColor:'#f0f2ff',bodyColor:'#b8bcde',borderColor:'rgba(99,112,255,.3)',borderWidth:1}},
+        scales:{x:{grid:{color:'rgba(99,112,255,.06)'},ticks:{color:'#6b7099',font:{size:10},maxTicksLimit:8}},
+          y:{grid:{color:'rgba(99,112,255,.06)'},ticks:{color:'#6b7099',font:{size:10}},beginAtZero:true}}}
+    });
+    return function(){ if(cRef.current) cRef.current.destroy(); };
+  },[data]);
+  return h('div',{className:'chart-wrap'},h('canvas',{ref:ref,style:{maxHeight:'180px'}}));
+}
 
-function BarChart({data,xKey,yKey,color='#6370ff'}){const ref=useRef();const cRef=useRef();useEffect(()=>{if(!ref.current||!data?.length)return;if(cRef.current)cRef.current.destroy();cRef.current=new Chart(ref.current,{type:'bar',data:{labels:data.map(d=>d[xKey]),datasets:[{data:data.map(d=>d[yKey]),backgroundColor:color+'cc',borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1c2040',titleColor:'#eef0ff',bodyColor:'#b0b4d8',borderColor:'rgba(99,112,255,.3)',borderWidth:1}},scales:{x:{grid:{display:false},ticks:{color:'#5e6388',font:{size:10}}},y:{grid:{color:'rgba(99,112,255,.06)'},ticks:{color:'#5e6388',font:{size:10}}}},animation:{duration:800}}});return()=>cRef.current?.destroy();},[data]);return React.createElement('div',{className:'chart-box',style:{height:160}},React.createElement('canvas',{ref}));}
+function BarChart(props) {
+  var data=props.data, lk=props.labelKey, vk=props.valueKey;
+  var ref=useRef(); var cRef=useRef();
+  useEffect(function(){
+    if(!ref.current||!data||!data.length) return;
+    if(cRef.current) cRef.current.destroy();
+    var colors=data.map(function(_,i){return 'hsla('+(230+i*18)+',75%,'+(65-i*3)+'%,0.85)';});
+    cRef.current = new Chart(ref.current,{
+      type:'bar',
+      data:{labels:data.map(function(d){return d[lk];}),
+        datasets:[{data:data.map(function(d){return d[vk];}),backgroundColor:colors,borderRadius:6,borderSkipped:false}]},
+      options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},
+        tooltip:{backgroundColor:'#1e2340',titleColor:'#f0f2ff',bodyColor:'#b8bcde',borderColor:'rgba(99,112,255,.3)',borderWidth:1}},
+        scales:{x:{grid:{color:'rgba(99,112,255,.06)'},ticks:{color:'#6b7099',font:{size:10}}},
+          y:{grid:{display:false},ticks:{color:'#b8bcde',font:{size:11}}}}}
+    });
+    return function(){ if(cRef.current) cRef.current.destroy(); };
+  },[data]);
+  return h('div',{className:'chart-wrap'},h('canvas',{ref:ref,style:{maxHeight:'220px'}}));
+}
 
-function UserModal({userId,onClose,onUpdated}){const[data,setData]=useState(null);const[loading,setLoading]=useState(true);const[saving,setSaving]=useState(false);const[role,setRole]=useState('');const[active,setActive]=useState(1);useEffect(()=>{api('GET',`/admin/users/${userId}`).then(d=>{setData(d);setRole(d.user.role);setActive(d.user.is_active);setLoading(false);}).catch(()=>setLoading(false));},[userId]);async function handleSave(){setSaving(true);try{await api('PUT',`/admin/users/${userId}`,{role,is_active:active});onUpdated();onClose();}catch(e){alert(e.message);}finally{setSaving(false);}}async function handleDeactivate(){if(!confirm('Deactivate this user?'))return;try{await api('DELETE',`/admin/users/${userId}`);onUpdated();onClose();}catch(e){alert(e.message);}}
-return React.createElement('div',{className:'modal-overlay',onClick:e=>{if(e.target===e.currentTarget)onClose();}},React.createElement('div',{className:'modal'},loading?React.createElement('div',{className:'loading-page'},React.createElement('div',{className:'spinner'})):data&&React.createElement('div',null,React.createElement('div',{className:'modal-title'},data.user.name,React.createElement('button',{className:'modal-close',onClick:onClose},'×')),React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:20}},[['Email',data.user.email],['Role',data.user.role],['Joined',fmt.date(data.user.created_at)],['Last Login',fmt.rel(data.user.last_login)],['GPA',data.profile?.gpa??'—'],['Region',data.profile?.region??'—'],['Degree',data.profile?.degree??'—'],['Predictions',data.history?.length??0]].map(([k,v])=>React.createElement('div',{key:k,style:{background:'var(--bg2)',borderRadius:'var(--r-xs)',padding:'10px 12px'}},React.createElement('div',{style:{fontSize:10,color:'var(--text2)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:3}},k),React.createElement('div',{style:{fontSize:13,fontWeight:500,color:'var(--text0)'}},String(v))))),React.createElement('div',{style:{marginBottom:20}},React.createElement('div',{className:'field-label'},'Profile Completion'),React.createElement('div',{className:'prog-wrap'},React.createElement('div',{className:'prog-bar prog-accent',style:{width:`${data.completion}%`}})),React.createElement('div',{style:{fontSize:11,color:'var(--text2)',marginTop:4}},`${data.completion}%`)),React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:20}},React.createElement('div',null,React.createElement('label',{className:'field-label'},'Role'),React.createElement('select',{className:'input',style:{width:'100%'},value:role,onChange:e=>setRole(e.target.value)},['student','counselor','admin'].map(r=>React.createElement('option',{key:r,value:r},r.charAt(0).toUpperCase()+r.slice(1))))),React.createElement('div',null,React.createElement('label',{className:'field-label'},'Status'),React.createElement('select',{className:'input',style:{width:'100%'},value:active,onChange:e=>setActive(Number(e.target.value))},React.createElement('option',{value:1},'Active'),React.createElement('option',{value:0},'Inactive')))),React.createElement('div',{style:{display:'flex',gap:10}},React.createElement('button',{className:'btn btn-primary',onClick:handleSave,disabled:saving},saving?React.createElement('span',{className:'spinner'}):'💾 Save Changes'),React.createElement('button',{className:'btn btn-danger',onClick:handleDeactivate},'🚫 Deactivate'),React.createElement('button',{className:'btn btn-ghost',onClick:onClose},'Cancel')))));}
+function DonutChart(props) {
+  var data=props.data, lk=props.labelKey, vk=props.valueKey;
+  var ref=useRef(); var cRef=useRef();
+  useEffect(function(){
+    if(!ref.current||!data||!data.length) return;
+    if(cRef.current) cRef.current.destroy();
+    cRef.current = new Chart(ref.current,{
+      type:'doughnut',
+      data:{labels:data.map(function(d){return d[lk];}),
+        datasets:[{data:data.map(function(d){return d[vk];}),
+          backgroundColor:['#6370ff','#22d3ee','#34d399','#fbbf24','#f472b6','#a78bfa'],
+          borderColor:'transparent',hoverOffset:8}]},
+      options:{responsive:true,cutout:'65%',
+        plugins:{legend:{position:'right',labels:{color:'#b8bcde',font:{size:11},padding:12,usePointStyle:true}},
+          tooltip:{backgroundColor:'#1e2340',titleColor:'#f0f2ff',bodyColor:'#b8bcde',borderColor:'rgba(99,112,255,.3)',borderWidth:1}}}
+    });
+    return function(){ if(cRef.current) cRef.current.destroy(); };
+  },[data]);
+  return h('div',{className:'chart-wrap'},h('canvas',{ref:ref,style:{maxHeight:'200px'}}));
+}
 
-function OverviewPage(){const[stats,setStats]=useState(null);const[logs,setLogs]=useState([]);const[loading,setLoading]=useState(true);useEffect(()=>{Promise.all([api('GET','/admin/stats'),api('GET','/admin/logs')]).then(([s,l])=>{setStats(s);setLogs(l.logs||[]);setLoading(false);}).catch(()=>setLoading(false));},[]);if(loading)return React.createElement('div',{className:'loading-page'},React.createElement('div',{className:'spinner'}),React.createElement('span',null,'Loading...'));if(!stats)return React.createElement('div',{style:{color:'var(--red)',padding:40}},'Failed to load. Make sure you are logged in as admin and the backend has the admin routes registered.');const statCards=[{icon:'👥',num:fmt.num(stats.users.total),label:'Total Users',delta:`+${stats.users.new_this_week} this week`,up:true},{icon:'⚡',num:fmt.num(stats.predictions.total),label:'Predictions Made',delta:`+${stats.predictions.this_week} this week`,up:true},{icon:'🗺️',num:stats.platform.total_careers,label:'Career Paths',delta:'In knowledge base',up:false},{icon:'🎓',num:stats.platform.total_scholarships,label:'Scholarships',delta:'Active schemes',up:false}];
-return React.createElement('div',{className:'page'},React.createElement('div',{className:'stats-row'},statCards.map(s=>React.createElement('div',{className:'stat-card',key:s.label},React.createElement('div',{className:'stat-icon'},s.icon),React.createElement('div',{className:'stat-num'},s.num),React.createElement('div',{className:'stat-label'},s.label),React.createElement('div',{className:`stat-delta ${s.up?'up':'neutral'}`},s.up?`↑ ${s.delta}`:s.delta)))),React.createElement('div',{className:'grid2',style:{marginBottom:16}},React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Daily Registrations (7 days)'),React.createElement(LineChart,{data:stats.charts.daily_registrations,color:'#6370ff'})),React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Daily Predictions (7 days)'),React.createElement(LineChart,{data:stats.charts.daily_predictions,color:'#22d3ee'}))),React.createElement('div',{className:'grid-70-30'},React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Recent Activity'),React.createElement('div',{style:{maxHeight:260,overflowY:'auto'}},logs.length===0?React.createElement('div',{style:{color:'var(--text2)',fontSize:13,padding:'20px 0'}},'No activity yet. Register some users first.'):logs.map((log,i)=>React.createElement('div',{className:'log-row',key:i},React.createElement('div',{className:`log-dot ${log.type==='registration'?'reg':'pred'}`}),React.createElement('div',{className:'log-text'},React.createElement('span',{style:{fontWeight:500,color:'var(--text0)'}},log.subject),' ',log.type==='registration'?'joined the platform':`got predicted: ${log.detail}`),React.createElement('div',{className:'log-time'},fmt.rel(log.timestamp)))))),React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Platform Health'),React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:14}},[['Students',stats.users.students,'cyan'],['Counselors',stats.users.counselors,'amber'],['Admins',stats.users.admins,'red'],['Active',stats.users.active,'green']].map(([label,val,color])=>React.createElement('div',{key:label},React.createElement('div',{style:{display:'flex',justifyContent:'space-between',marginBottom:5,fontSize:12}},React.createElement('span',{style:{color:'var(--text2)'}},label),React.createElement('span',{style:{color:`var(--${color})`,fontWeight:600}},fmt.num(val))),React.createElement('div',{className:'prog-wrap'},React.createElement('div',{className:'prog-bar',style:{width:`${stats.users.total>0?(val/stats.users.total*100):0}%`,background:`var(--${color})`}})))),React.createElement('div',{style:{marginTop:8,paddingTop:12,borderTop:'1px solid var(--border)'}},React.createElement('div',{style:{fontSize:11,color:'var(--text2)',marginBottom:4}},'Most Predicted Career'),React.createElement('div',{style:{fontWeight:600,color:'#a78bfa',fontSize:13}},stats.predictions.top_career),React.createElement('div',{style:{fontSize:11,color:'var(--text2)',marginTop:2}},`${fmt.num(stats.predictions.top_career_count)} times predicted`))))));}
+// ── KPI Card ──────────────────────────────────────────────────────────────
+function KPICard(props) {
+  var _s = useState(0), disp=_s[0], setDisp=_s[1];
+  useEffect(function(){
+    var end = typeof props.num==='number'?props.num:0;
+    if(end===0){setDisp(props.num);return;}
+    var start=0, step=Math.ceil(end/40);
+    var t=setInterval(function(){start+=step;if(start>=end){setDisp(props.num);clearInterval(t);}else setDisp(start);},20);
+    return function(){clearInterval(t);};
+  },[props.num]);
+  return h('div',{className:'kpi-card '+props.color},
+    h('div',{className:'kpi-icon'},props.icon),
+    h('div',{className:'kpi-num'},typeof props.num==='number'?disp.toLocaleString():props.num),
+    h('div',{className:'kpi-label'},props.label),
+    props.delta?h('div',{className:'kpi-delta'},props.delta):null
+  );
+}
 
-function UsersPage(){const[users,setUsers]=useState([]);const[total,setTotal]=useState(0);const[page,setPage2]=useState(1);const[totalPages,setTotalPages]=useState(1);const[search,setSearch]=useState('');const[roleF,setRoleF]=useState('');const[loading,setLoading]=useState(true);const[sel,setSel]=useState(null);function load(p=1){setLoading(true);const params=new URLSearchParams({page:p,per_page:15});if(search)params.set('search',search);if(roleF)params.set('role',roleF);api('GET',`/admin/users?${params}`).then(d=>{setUsers(d.users);setTotal(d.total);setTotalPages(d.total_pages);setPage2(p);setLoading(false);}).catch(()=>setLoading(false));}useEffect(()=>{load(1);},[]);const roleBadge=r=>{const map={admin:'badge-red',counselor:'badge-amber',student:'badge-cyan'};return React.createElement('span',{className:`badge ${map[r]||'badge-gray'}`},r);};
-return React.createElement('div',{className:'page'},React.createElement('div',{className:'search-row'},React.createElement('input',{className:'input',placeholder:'🔍 Search name or email...',style:{flex:1},value:search,onChange:e=>setSearch(e.target.value),onKeyDown:e=>e.key==='Enter'&&load(1)}),React.createElement('select',{className:'input',value:roleF,onChange:e=>{setRoleF(e.target.value);load(1);}},React.createElement('option',{value:''},'All Roles'),['student','counselor','admin'].map(r=>React.createElement('option',{key:r,value:r},r.charAt(0).toUpperCase()+r.slice(1)))),React.createElement('button',{className:'btn btn-primary',onClick:()=>load(1)},'Search')),React.createElement('div',{style:{fontSize:12,color:'var(--text2)',marginBottom:12}},`${fmt.num(total)} users found`),loading?React.createElement('div',{className:'loading-page'},React.createElement('div',{className:'spinner'})):React.createElement('div',null,React.createElement('div',{className:'table-wrap'},React.createElement('table',null,React.createElement('thead',null,React.createElement('tr',null,['User','Email','Role','Status','GPA','Region','Joined','Preds','Actions'].map(h=>React.createElement('th',{key:h},h)))),React.createElement('tbody',null,users.map(u=>React.createElement('tr',{key:u.id},React.createElement('td',{className:'bold'},React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8}},React.createElement('div',{style:{width:28,height:28,borderRadius:'50%',background:'linear-gradient(135deg,var(--accent),var(--cyan))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,color:'white',flexShrink:0}},u.avatar_initials||u.name?.[0]||'?'),u.name)),React.createElement('td',null,u.email),React.createElement('td',null,roleBadge(u.role)),React.createElement('td',null,React.createElement('span',{className:`badge ${u.is_active?'badge-green':'badge-red'}`},u.is_active?'Active':'Inactive')),React.createElement('td',null,u.gpa??'—'),React.createElement('td',null,u.region??'—'),React.createElement('td',null,fmt.date(u.created_at)),React.createElement('td',null,React.createElement('span',{className:'badge badge-accent'},u.pred_count)),React.createElement('td',null,React.createElement('button',{className:'btn btn-ghost btn-sm',onClick:()=>setSel(u.id)},'View'))))))),React.createElement('div',{className:'pagination'},React.createElement('span',null,`Page ${page} of ${totalPages}`),React.createElement('div',{className:'page-btns'},React.createElement('button',{className:'page-btn',onClick:()=>load(page-1),disabled:page<=1},'←'),[...Array(Math.min(5,totalPages))].map((_,i)=>{const p=Math.max(1,Math.min(page-2,totalPages-4))+i;if(p<1||p>totalPages)return null;return React.createElement('button',{key:p,className:`page-btn ${p===page?'active':''}`,onClick:()=>load(p)},p);}),React.createElement('button',{className:'page-btn',onClick:()=>load(page+1),disabled:page>=totalPages},'→')))),sel&&React.createElement(UserModal,{userId:sel,onClose:()=>setSel(null),onUpdated:()=>load(page)}));}
+// ── Toast ─────────────────────────────────────────────────────────────────
+function Toast(props) {
+  useEffect(function(){var t=setTimeout(props.onClose,3500);return function(){clearTimeout(t);};});
+  return h('div',{className:'toast '+props.type},(props.type==='success'?'✓ ':'⚠ ')+props.message);
+}
 
-function AnalyticsPage(){const[data,setData]=useState(null);const[predData,setPred]=useState(null);const[loading,setLoading]=useState(true);useEffect(()=>{Promise.all([api('GET','/admin/analytics'),api('GET','/admin/predictions')]).then(([a,p])=>{setData(a);setPred(p);setLoading(false);}).catch(()=>setLoading(false));},[]);if(loading)return React.createElement('div',{className:'loading-page'},React.createElement('div',{className:'spinner'}),React.createElement('span',null,'Loading analytics...'));if(!data)return React.createElement('div',{style:{color:'var(--red)',padding:40}},'Failed to load analytics.');const maxC=Math.max(...(predData?.career_distribution||[]).map(c=>c.count),1);
-return React.createElement('div',{className:'page'},React.createElement('div',{className:'card',style:{marginBottom:16}},React.createElement('div',{className:'card-title'},'Monthly Registrations (Last 6 Months)'),React.createElement(BarChart,{data:data.monthly_signups,xKey:'month',yKey:'count',color:'#6370ff'})),React.createElement('div',{className:'grid2',style:{marginBottom:16}},React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Top Predicted Careers'),predData?.career_distribution?.length?predData.career_distribution.slice(0,10).map((c,i)=>React.createElement('div',{className:'career-row',key:c.career},React.createElement('div',{className:'career-name'},`${i+1}. ${c.career}`),React.createElement('div',{className:'career-bar-wrap'},React.createElement('div',{className:'career-bar-fill',style:{width:`${c.count/maxC*100}%`}})),React.createElement('div',{className:'career-count'},c.count))):React.createElement('div',{style:{color:'var(--text2)',fontSize:13,padding:'20px 0'}},'No predictions yet.')),React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'GPA Distribution'),data.gpa_distribution?.length?React.createElement(DoughnutChart,{data:data.gpa_distribution}):React.createElement('div',{style:{color:'var(--text2)',fontSize:13,padding:'20px 0'}},'No GPA data yet.'))),React.createElement('div',{className:'grid2'},React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Degree Distribution'),data.degree_distribution?.length?React.createElement(DoughnutChart,{data:data.degree_distribution}):React.createElement('div',{style:{color:'var(--text2)',fontSize:13}},'No data.')),React.createElement('div',{className:'card'},React.createElement('div',{className:'card-title'},'Category Distribution'),data.category_distribution?.length?React.createElement(DoughnutChart,{data:data.category_distribution}):React.createElement('div',{style:{color:'var(--text2)',fontSize:13}},'No data.'))));}
+// ═══════════════════════════════════════════════════════
+// OVERVIEW PAGE
+// ═══════════════════════════════════════════════════════
+function OverviewPage(props) {
+  var useReal=props.useReal;
+  var _s1=useState(null),ov=_s1[0],setOv=_s1[1];
+  var _s2=useState([]),reg=_s2[0],setReg=_s2[1];
+  var _s3=useState([]),preds=_s3[0],setPreds=_s3[1];
+  var _s4=useState([]),careers=_s4[0],setCareers=_s4[1];
+  var _s5=useState([]),regions=_s5[0],setRegions=_s5[1];
+  var _s6=useState([]),activity=_s6[0],setActivity=_s6[1];
+  var _s7=useState(true),loading=_s7[0],setLoading=_s7[1];
 
-function CareersPage(){const[careers,setCareers]=useState([]);const[loading,setLoading]=useState(true);useEffect(()=>{api('GET','/admin/careers').then(d=>{setCareers(d.careers);setLoading(false);}).catch(()=>setLoading(false));},[]);const demandBadge=d=>{const map={'Very High':'badge-green','High':'badge-cyan','Medium':'badge-amber','Low':'badge-red'};return React.createElement('span',{className:`badge ${map[d]||'badge-gray'}`},d);};
-return React.createElement('div',{className:'page'},React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}},React.createElement('div',{style:{fontSize:13,color:'var(--text2)'}},`${careers.length} careers in knowledge base`),React.createElement('button',{className:'btn btn-primary'},'+ Add Career')),loading?React.createElement('div',{className:'loading-page'},React.createElement('div',{className:'spinner'})):React.createElement('div',{className:'table-wrap'},React.createElement('table',null,React.createElement('thead',null,React.createElement('tr',null,['Career','Demand','Skills','Tools','Steps','Entry Salary','Senior Salary',''].map(h=>React.createElement('th',{key:h},h)))),React.createElement('tbody',null,careers.map(c=>React.createElement('tr',{key:c.name},React.createElement('td',{className:'bold'},c.name),React.createElement('td',null,demandBadge(c.job_demand)),React.createElement('td',null,React.createElement('span',{className:'badge badge-accent'},c.skills_count)),React.createElement('td',null,React.createElement('span',{className:'badge badge-cyan'},c.tools_count)),React.createElement('td',null,c.roadmap_steps),React.createElement('td',null,React.createElement('span',{style:{color:'var(--green)',fontWeight:600}},c.salary_entry)),React.createElement('td',null,React.createElement('span',{style:{color:'var(--amber)',fontWeight:600}},c.salary_senior)),React.createElement('td',null,React.createElement('button',{className:'btn btn-ghost btn-sm'},'Edit'))))))));}
+  useEffect(function(){
+    if(!useReal){
+      setOv(MOCK.overview);setReg(MOCK.registrations);setPreds(MOCK.predictions);
+      setCareers(MOCK.careers);setRegions(MOCK.regions);setActivity(MOCK.activity);
+      setLoading(false);return;
+    }
+    Promise.all([
+      api('GET','/admin/overview'),api('GET','/admin/analytics/registrations?days=30'),
+      api('GET','/admin/analytics/predictions?days=30'),api('GET','/admin/analytics/careers?limit=8'),
+      api('GET','/admin/analytics/regions'),api('GET','/admin/activity?limit=8')
+    ]).then(function(r){setOv(r[0]);setReg(r[1]);setPreds(r[2]);setCareers(r[3]);setRegions(r[4]);setActivity(r[5]);})
+      .catch(function(){setOv(MOCK.overview);setReg(MOCK.registrations);setPreds(MOCK.predictions);
+        setCareers(MOCK.careers);setRegions(MOCK.regions);setActivity(MOCK.activity);})
+      .finally(function(){setLoading(false);});
+  },[]);
 
-function ScholarshipsPage(){const[data,setData]=useState([]);const[loading,setLoading]=useState(true);useEffect(()=>{api('GET','/admin/scholarships').then(d=>{setData(d.scholarships);setLoading(false);}).catch(()=>setLoading(false));},[]);const typeBadge=t=>{const map={Scholarship:'badge-accent','Skill Program':'badge-green',Internship:'badge-amber',Fellowship:'badge-pink'};return React.createElement('span',{className:`badge ${map[t]||'badge-gray'}`},t);};
-return React.createElement('div',{className:'page'},React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}},React.createElement('div',{style:{fontSize:13,color:'var(--text2)'}},`${data.length} scholarships`),React.createElement('button',{className:'btn btn-primary'},'+ Add Scholarship')),loading?React.createElement('div',{className:'loading-page'},React.createElement('div',{className:'spinner'})):React.createElement('div',{className:'table-wrap'},React.createElement('table',null,React.createElement('thead',null,React.createElement('tr',null,['Name','Type','Provider','Benefit','Deadline','Gender','Saved By',''].map(h=>React.createElement('th',{key:h},h)))),React.createElement('tbody',null,data.map(s=>React.createElement('tr',{key:s.id},React.createElement('td',{className:'bold',style:{maxWidth:180}},s.name),React.createElement('td',null,typeBadge(s.type)),React.createElement('td',null,s.provider),React.createElement('td',null,React.createElement('span',{style:{color:'var(--green)',fontWeight:600}},s.benefit)),React.createElement('td',null,s.deadline),React.createElement('td',null,s.gender||'All'),React.createElement('td',null,React.createElement('span',{className:'badge badge-accent'},s.saved_by_users)),React.createElement('td',null,React.createElement('button',{className:'btn btn-ghost btn-sm'},'Edit'))))))));}
+  if(loading) return h('div',{className:'loading-card'},h('div',{className:'spinner'}),h('span',null,'Loading analytics...'));
 
-function App(){const[page,setPage]=useState('overview');const[user,setUser]=useState(null);const[time,setTime]=useState(new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));useEffect(()=>{const u=getUser();if(!u){window.location.href='auth.html';return;}if(u.role!=='admin'){alert('Admin access required.');window.location.href='auth.html';return;}setUser(u);const t=setInterval(()=>setTime(new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})),10000);return()=>clearInterval(t);},[]);function handleLogout(){localStorage.clear();window.location.href='auth.html';}
-const navItems=[{id:'overview',icon:'📊',label:'Overview'},{id:'users',icon:'👥',label:'Users'},{id:'analytics',icon:'📈',label:'Analytics'},{id:'careers',icon:'🗺️',label:'Careers'},{id:'scholarships',icon:'🎓',label:'Scholarships'}];
-const pages={overview:OverviewPage,users:UsersPage,analytics:AnalyticsPage,careers:CareersPage,scholarships:ScholarshipsPage};
-const PageComp=pages[page]||OverviewPage;const pageTitle=navItems.find(n=>n.id===page)?.label||'Dashboard';
-if(!user)return React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}},React.createElement('div',{className:'spinner'}));
-return React.createElement('div',{style:{display:'flex',height:'100vh'}},React.createElement('aside',{className:'sidebar'},React.createElement('div',{className:'sidebar-top'},React.createElement('div',null,React.createElement('span',{className:'logo-mark'},'CareerAI'),React.createElement('span',{className:'logo-badge'},'Admin'))),React.createElement('nav',{className:'sidebar-nav'},React.createElement('div',{className:'nav-section'},'Management'),navItems.map(item=>React.createElement('div',{key:item.id,className:`nav-item ${page===item.id?'active':''}`,onClick:()=>setPage(item.id)},React.createElement('span',{className:'nav-icon'},item.icon),item.label)),React.createElement('div',{className:'nav-section'},'Platform'),React.createElement('div',{className:'nav-item',onClick:()=>window.open('https://splendorous-meerkat-321335.netlify.app','_blank')},React.createElement('span',{className:'nav-icon'},'🌐'),'Live Site ↗')),React.createElement('div',{className:'sidebar-footer'},React.createElement('div',{className:'admin-pill'},React.createElement('div',{className:'admin-avatar'},user?.avatar_initials||'A'),React.createElement('div',null,React.createElement('div',{className:'admin-name'},user?.name?.split(' ')[0]||'Admin'),React.createElement('div',{className:'admin-role'},'Administrator'))))),React.createElement('div',{className:'main'},React.createElement('div',{className:'topbar'},React.createElement('div',{className:'topbar-title'},pageTitle),React.createElement('div',{className:'topbar-right'},React.createElement('div',{className:'topbar-time'},`🕐 ${time}`),React.createElement('button',{className:'logout-btn',onClick:handleLogout},'Sign out'))),React.createElement('div',{className:'content'},React.createElement(PageComp))));}
+  return h('div',{className:'page'},
+    h('div',{className:'section-header'},
+      h('div',null,
+        h('div',{className:'section-title'},'Platform Overview'),
+        h('div',{className:'section-sub'},'Real-time platform metrics and analytics')
+      )
+    ),
+    h('div',{className:'kpi-grid'},
+      h(KPICard,{icon:'👥',num:ov&&ov.total_students,label:'Total Students',delta:'+'+(ov&&ov.new_this_week)+' this week',color:'blue'}),
+      h(KPICard,{icon:'⚡',num:ov&&ov.total_predictions,label:'Predictions Made',delta:(ov&&ov.active_this_week)+' active this week',color:'green'}),
+      h(KPICard,{icon:'✅',num:ov&&ov.profiles_complete,label:'Profiles Complete',delta:(ov&&ov.avg_profile_completion)+'% avg',color:'amber'}),
+      h(KPICard,{icon:'🆕',num:ov&&ov.new_today,label:'New Today',delta:'+'+(ov&&ov.new_this_week)+' this week',color:'pink'})
+    ),
+    h('div',{className:'chart-row'},
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Student Registrations (30 Days)'),
+        h(LineChart,{data:reg,label:'Registrations',color:'#6370ff'})
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Recent Activity'),
+        activity.map(function(a,i){
+          return h('div',{className:'activity-item',key:i},
+            h('div',{className:'activity-dot '+(a.type==='new_user'?'user':'pred')}),
+            h('div',null,
+              h('div',{className:'activity-text'},a.type==='new_user'?'New student: '+a.detail:a.detail),
+              h('div',{className:'activity-time'},a.ts||'')
+            )
+          );
+        })
+      )
+    ),
+    h('div',{className:'chart-row-equal'},
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Predictions Over Time (30 Days)'),
+        h(LineChart,{data:preds,label:'Predictions',color:'#34d399'})
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Students by Region'),
+        h(BarChart,{data:regions,labelKey:'region',valueKey:'count'})
+      )
+    ),
+    h('div',{className:'chart-row-equal'},
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Top Predicted Careers'),
+        h(BarChart,{data:careers,labelKey:'career',valueKey:'count'})
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Degree Distribution'),
+        h(DonutChart,{data:MOCK.degrees,labelKey:'degree',valueKey:'count'})
+      )
+    )
+  );
+}
 
-window.addEventListener('DOMContentLoaded', function() {
-  try {
-    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
-  } catch(e) {
-    document.getElementById('root').innerHTML = '<div style="color:white;padding:40px;font-family:sans-serif">Error: ' + e.message + '</div>';
-    console.error(e);
+// ═══════════════════════════════════════════════════════
+// USERS PAGE
+// ═══════════════════════════════════════════════════════
+function UsersPage(props) {
+  var useReal=props.useReal, showToast=props.showToast;
+  var _s1=useState(MOCK.users),data=_s1[0],setData=_s1[1];
+  var _s2=useState(false),loading=_s2[0],setLoading=_s2[1];
+  var _s3=useState(''),search=_s3[0],setSearch=_s3[1];
+  var _s4=useState(''),role=_s4[0],setRole=_s4[1];
+  var _s5=useState(null),selected=_s5[0],setSelected=_s5[1];
+  var _s6=useState(null),actionLoading=_s6[0],setActionLoading=_s6[1];
+
+  function load(p,s,r){
+    setLoading(true);
+    if(!useReal){setData(MOCK.users);setLoading(false);return;}
+    api('GET','/admin/users?page='+(p||1)+'&search='+(s||search)+'&role='+(r||role)+'&per_page=20')
+      .then(function(d){setData(d);}).catch(function(){setData(MOCK.users);}).finally(function(){setLoading(false);});
   }
-});
+
+  useEffect(function(){load(1,'','');},[]); // eslint-disable-line
+  useEffect(function(){
+    var t=setTimeout(function(){load(1,search,role);},400);
+    return function(){clearTimeout(t);};
+  },[search,role]);
+
+  function handleToggle(userId,isActive){
+    setActionLoading(userId+'t');
+    var doApi = useReal ? api('PUT','/admin/users/'+userId+'/toggle') : Promise.resolve({});
+    doApi.then(function(){
+      setData(function(d){return Object.assign({},d,{users:d.users.map(function(u){return u.id===userId?Object.assign({},u,{is_active:isActive?0:1}):u;})});});
+      showToast(isActive?'User disabled':'User enabled','success');
+    }).catch(function(e){showToast(e.message,'error');}).finally(function(){setActionLoading(null);});
+  }
+
+  function handleRoleChange(userId,newRole){
+    setActionLoading(userId+'r');
+    var doApi = useReal ? api('PUT','/admin/users/'+userId+'/role',{role:newRole}) : Promise.resolve({});
+    doApi.then(function(){
+      setData(function(d){return Object.assign({},d,{users:d.users.map(function(u){return u.id===userId?Object.assign({},u,{role:newRole}):u;})});});
+      showToast('Role changed to '+newRole,'success');
+    }).catch(function(e){showToast(e.message,'error');}).finally(function(){setActionLoading(null);});
+  }
+
+  function roleBadge(r){
+    var map={admin:'badge-red',counselor:'badge-amber',student:'badge-accent'};
+    return h('span',{className:'badge '+(map[r]||'badge-gray')},r);
+  }
+
+  return h('div',{className:'page'},
+    h('div',{className:'section-header'},
+      h('div',null,
+        h('div',{className:'section-title'},'User Management'),
+        h('div',{className:'section-sub'},data.total+' total users')
+      )
+    ),
+    h('div',{className:'filter-bar'},
+      h('input',{className:'search-input',placeholder:'🔍  Search by name or email...',value:search,onChange:function(e){setSearch(e.target.value);}}),
+      h('select',{className:'filter-select',value:role,onChange:function(e){setRole(e.target.value);}},
+        h('option',{value:''},'All Roles'),
+        ['student','counselor','admin'].map(function(r){return h('option',{key:r,value:r},r.charAt(0).toUpperCase()+r.slice(1));})
+      )
+    ),
+    h('div',{className:'card'},
+      loading ? h('div',{className:'loading-card'},h('div',{className:'spinner'})) :
+      h('div',{className:'table-wrap'},
+        h('table',null,
+          h('thead',null,
+            h('tr',null,
+              ['Student','Role','Region/Degree','GPA','Predictions','Profile','Status','Actions'].map(function(hd){return h('th',{key:hd},hd);})
+            )
+          ),
+          h('tbody',null,
+            data.users.map(function(u){
+              return h('tr',{key:u.id},
+                h('td',null,h('div',{className:'user-cell'},
+                  h('div',{className:'u-avatar'},u.avatar_initials||u.name[0]),
+                  h('div',null,h('div',{className:'u-name'},u.name),h('div',{className:'u-email'},u.email))
+                )),
+                h('td',null,roleBadge(u.role)),
+                h('td',null,
+                  h('div',{style:{fontSize:12,color:'var(--text1)'}},u.region||'—'),
+                  h('div',{style:{fontSize:11,color:'var(--text2)'}},u.degree||'—')
+                ),
+                h('td',null,u.gpa?h('div',null,
+                  h('div',{style:{fontSize:13,fontWeight:600,color:'var(--text0)'}},u.gpa),
+                  h('div',{className:'mini-progress'},h('div',{className:'mini-bar',style:{width:(u.gpa/4*100)+'%'}}))
+                ):h('span',{style:{color:'var(--text2)'}},'—')),
+                h('td',null,h('span',{className:'badge badge-cyan'},(u.pred_count||0)+' preds')),
+                h('td',null,u.profile_complete?h('span',{className:'badge badge-green'},'✓ Complete'):h('span',{className:'badge badge-gray'},'Incomplete')),
+                h('td',null,u.is_active?h('span',{className:'badge badge-green'},'● Active'):h('span',{className:'badge badge-red'},'● Disabled')),
+                h('td',null,h('div',{className:'action-row'},
+                  h('button',{className:'btn-action btn-view',onClick:function(){setSelected(u);}},'View'),
+                  h('button',{className:'btn-action '+(u.is_active?'btn-disable':'btn-enable'),
+                    disabled:actionLoading===u.id+'t',
+                    onClick:function(){handleToggle(u.id,u.is_active);}
+                  },u.is_active?'Disable':'Enable'),
+                  u.role!=='admin'?h('button',{className:'btn-action btn-role',
+                    disabled:actionLoading===u.id+'r',
+                    onClick:function(){handleRoleChange(u.id,u.role==='student'?'counselor':'student');}
+                  },u.role==='student'?'→ Counselor':'→ Student'):null
+                ))
+              );
+            })
+          )
+        )
+      )
+    ),
+    selected?h('div',{className:'modal-overlay',onClick:function(e){if(e.target===e.currentTarget)setSelected(null);}},
+      h('div',{className:'modal'},
+        h('div',{className:'modal-title'},
+          selected.name+"'s Profile",
+          h('button',{className:'modal-close',onClick:function(){setSelected(null);}},'×')
+        ),
+        [['Email',selected.email],['Role',selected.role],['Region',selected.region||'Not set'],
+         ['Degree',selected.degree||'Not set'],['GPA',selected.gpa?selected.gpa+' / 4.0':'Not set'],
+         ['Predictions',(selected.pred_count||0)+' total'],
+         ['Profile',selected.profile_complete?'Complete':'Incomplete'],
+         ['Status',selected.is_active?'Active':'Disabled'],
+         ['Joined',selected.created_at?new Date(selected.created_at).toLocaleDateString('en-IN'):'Unknown']
+        ].map(function(item){
+          return h('div',{className:'detail-row',key:item[0]},
+            h('span',{className:'detail-key'},item[0]),
+            h('span',{className:'detail-val'},item[1])
+          );
+        })
+      )
+    ):null
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// CONTENT PAGE
+// ═══════════════════════════════════════════════════════
+function ContentPage(props) {
+  var useReal=props.useReal;
+  var _s=useState(MOCK.content),stats=_s[0],setStats=_s[1];
+  useEffect(function(){
+    if(!useReal) return;
+    api('GET','/admin/content/stats').then(function(d){setStats(d);}).catch(function(){});
+  },[]);
+
+  var items=[
+    {icon:'🎓',label:'Total Scholarships',val:stats&&stats.total_scholarships,color:'blue',desc:'Active government & private schemes'},
+    {icon:'⭐',label:'Saved by Students',val:stats&&stats.saved_scholarships,color:'green',desc:'Times scholarships were bookmarked'},
+    {icon:'🗺️',label:'Career Paths',val:stats&&stats.total_careers,color:'amber',desc:'Complete career knowledge cards'},
+    {icon:'📚',label:'Learning Resources',val:stats&&stats.total_resources,color:'pink',desc:'Courses, books, and videos'}
+  ];
+
+  return h('div',{className:'page'},
+    h('div',{className:'section-header'},
+      h('div',null,
+        h('div',{className:'section-title'},'Content Management'),
+        h('div',{className:'section-sub'},'Manage scholarships, careers, and learning resources')
+      )
+    ),
+    h('div',{className:'kpi-grid'},
+      items.map(function(item){
+        return h('div',{className:'kpi-card '+item.color,key:item.label},
+          h('div',{className:'kpi-icon'},item.icon),
+          h('div',{className:'kpi-num'},item.val),
+          h('div',{className:'kpi-label'},item.label),
+          h('div',{className:'kpi-delta',style:{color:'var(--text2)'}},item.desc)
+        );
+      })
+    ),
+    h('div',{className:'chart-row-equal'},
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Top Career Predictions'),
+        h(DonutChart,{data:MOCK.careers.slice(0,6),labelKey:'career',valueKey:'count'})
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'card-title'},'Students by Degree'),
+        h(BarChart,{data:MOCK.degrees,labelKey:'degree',valueKey:'count'})
+      )
+    ),
+    h('div',{className:'card',style:{marginTop:16}},
+      h('div',{className:'card-title'},'Quick Actions'),
+      h('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12}},
+        [['➕','Add Scholarship','Opens scholarship form'],
+         ['✏️','Edit Career Cards','Update career knowledge'],
+         ['📖','Manage Resources','Add/remove resources'],
+         ['📊','Export User Data','Download CSV report'],
+         ['🔔','Send Announcement','Notify all students'],
+         ['🗑️','Clean Inactive','Remove old accounts']
+        ].map(function(item){
+          return h('div',{key:item[1],style:{background:'var(--bg2)',border:'1px solid var(--border)',borderRadius:'var(--r-sm)',padding:16,cursor:'pointer'}},
+            h('div',{style:{fontSize:24,marginBottom:8}},item[0]),
+            h('div',{style:{fontWeight:600,color:'var(--text0)',fontSize:13,marginBottom:4}},item[1]),
+            h('div',{style:{fontSize:11,color:'var(--text2)'}},item[2])
+          );
+        })
+      )
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// LOGIN PAGE
+// ═══════════════════════════════════════════════════════
+function AdminLogin(props) {
+  var onLogin=props.onLogin;
+  var _s1=useState({email:'',password:''}),form=_s1[0],setForm=_s1[1];
+  var _s2=useState(false),loading=_s2[0],setLoading=_s2[1];
+  var _s3=useState(''),error=_s3[0],setError=_s3[1];
+
+  function set(k,v){setForm(function(f){var n=Object.assign({},f);n[k]=v;return n;});}
+
+  function handleLogin(e){
+    e.preventDefault(); setLoading(true); setError('');
+    api('POST','/auth/login',form).then(function(data){
+      if(data.user&&data.user.role!=='admin'){setError('Access denied. Admin accounts only.');setLoading(false);return;}
+      Auth.save(data.access_token,data.refresh_token,data.user);
+      onLogin(data.user,false);
+    }).catch(function(e){setError(e.message);setLoading(false);});
+  }
+
+  return h('div',{className:'login-wrap'},
+    h('div',{className:'login-card'},
+      h('div',{style:{textAlign:'center',marginBottom:28}},
+        h('div',{style:{fontFamily:'var(--font-d)',fontSize:20,fontWeight:800,background:'linear-gradient(135deg,var(--accent),var(--cyan))',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}},'CareerAI'),
+        h('div',{style:{fontSize:9,color:'var(--text2)',letterSpacing:'1.5px',textTransform:'uppercase',marginTop:2}},'Admin Dashboard'),
+        h('div',{className:'admin-badge'},'ADMIN ONLY')
+      ),
+      error?h('div',{style:{background:'rgba(248,113,113,.1)',border:'1px solid rgba(248,113,113,.25)',borderRadius:8,padding:'10px 14px',marginBottom:16,color:'var(--red)',fontSize:13}},'⚠ '+error):null,
+      h('form',{onSubmit:handleLogin},
+        h('input',{className:'login-input',type:'email',placeholder:'admin@careerai.com',value:form.email,onChange:function(e){set('email',e.target.value);},required:true}),
+        h('input',{className:'login-input',type:'password',placeholder:'Admin password',value:form.password,onChange:function(e){set('password',e.target.value);},required:true}),
+        h('button',{className:'login-btn',type:'submit',disabled:loading},loading?'Signing in...':'🔐  Sign In as Admin')
+      ),
+      h('hr',{style:{border:'none',borderTop:'1px solid var(--border)',margin:'20px 0'}}),
+      h('button',{className:'login-btn-demo',onClick:function(){onLogin({id:0,name:'Admin User',email:'admin@careerai.com',role:'admin',avatar_initials:'AU'},true);}},
+        '👁  Preview with Demo Data'
+      ),
+      h('div',{style:{fontSize:11,color:'var(--text2)',textAlign:'center',marginTop:10}},'Demo mode uses sample data — no backend needed')
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// ROOT APP
+// ═══════════════════════════════════════════════════════
+function App() {
+  var _s1=useState(null),user=_s1[0],setUser=_s1[1];
+  var _s2=useState(false),useReal=_s2[0],setUseReal=_s2[1];
+  var _s3=useState('overview'),page=_s3[0],setPage=_s3[1];
+  var _s4=useState(null),toast=_s4[0],setToast=_s4[1];
+  var _s5=useState(new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})),time=_s5[0],setTime=_s5[1];
+
+  useEffect(function(){
+    var t=setInterval(function(){setTime(new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));},30000);
+    return function(){clearInterval(t);};
+  },[]);
+
+  function showToast(msg,type){setToast({msg:msg,type:type||'success'});setTimeout(function(){setToast(null);},4000);}
+
+  function handleLogin(u,mock){
+    setUser(u); setUseReal(!mock);
+    showToast(mock?'Running in demo mode':'Welcome, '+(u.name.split(' ')[0])+'!','success');
+  }
+
+  function handleLogout(){
+    if(useReal) api('POST','/auth/logout',{refresh_token:Auth.getRefresh()}).catch(function(){});
+    Auth.clear(); setUser(null); setUseReal(false);
+  }
+
+  if(!user) return h(AdminLogin,{onLogin:handleLogin});
+
+  var navItems=[
+    {id:'overview',icon:'📊',label:'Overview'},
+    {id:'users',icon:'👥',label:'Users'},
+    {id:'content',icon:'📁',label:'Content'}
+  ];
+
+  var titleMap={overview:'📊 Overview',users:'👥 User Management',content:'📁 Content Management'};
+
+  var currentPage;
+  if(page==='overview') currentPage=h(OverviewPage,{useReal:useReal});
+  else if(page==='users') currentPage=h(UsersPage,{useReal:useReal,showToast:showToast});
+  else currentPage=h(ContentPage,{useReal:useReal});
+
+  return h('div',{className:'layout'},
+    h('aside',{className:'sidebar'},
+      h('div',{className:'sidebar-logo'},
+        h('div',{className:'logo-mark'},'CareerAI'),
+        h('div',{className:'logo-sub'},'Admin Panel'),
+        h('div',{className:'admin-badge'},'ADMIN')
+      ),
+      h('nav',{className:'sidebar-nav'},
+        h('div',{className:'nav-section'},'Navigation'),
+        navItems.map(function(item){
+          return h('div',{key:item.id,className:'nav-item'+(page===item.id?' active':''),onClick:function(){setPage(item.id);}},
+            h('span',{className:'nav-icon'},item.icon),item.label
+          );
+        }),
+        h('div',{className:'nav-section',style:{marginTop:8}},'Platform'),
+        h('div',{className:'nav-item',onClick:function(){window.open('https://kareerai1.netlify.app','_blank');}},
+          h('span',{className:'nav-icon'},'🌐'),'Live Site ↗'
+        ),
+        h('div',{className:'nav-item',onClick:function(){window.open('https://careerai-platform.onrender.com','_blank');}},
+          h('span',{className:'nav-icon'},'⚙️'),'API ↗'
+        )
+      ),
+      h('div',{className:'sidebar-footer'},
+        h('div',{className:'admin-pill'},
+          h('div',{className:'admin-avatar'},user&&user.avatar_initials?user.avatar_initials:'A'),
+          h('div',null,
+            h('div',{className:'admin-name'},user&&user.name?user.name:'Admin'),
+            h('div',{className:'admin-role'},useReal?'Live Mode':'Demo Mode')
+          )
+        )
+      )
+    ),
+    h('div',{className:'main'},
+      h('div',{className:'topbar'},
+        h('div',{className:'topbar-title'},titleMap[page]||'Dashboard'),
+        h('div',{className:'topbar-right'},
+          h('span',{className:'topbar-time'},'🕐 '+time),
+          !useReal?h('span',{style:{fontSize:11,color:'var(--amber)',background:'rgba(251,191,36,.1)',border:'1px solid rgba(251,191,36,.2)',borderRadius:4,padding:'2px 8px'}},'Demo Mode'):null,
+          h('button',{className:'btn-logout',onClick:handleLogout},'Sign Out')
+        )
+      ),
+      h('div',{className:'content'},currentPage)
+    ),
+    toast?h(Toast,{message:toast.msg,type:toast.type,onClose:function(){setToast(null);}}):null
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
 </script>
 </body>
 </html>
